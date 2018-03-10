@@ -3,9 +3,12 @@ organization in ThisBuild := "io.metabookmarks.lagom"
 // the Scala version that will be used for cross-compiled libraries
 scalaVersion in ThisBuild := "2.12.4"
 
-bintrayOrganization := Some("metabookmarks")
+bintrayOrganization in ThisBuild := Some("metabookmarks")
 
-bintrayRepository := "releases"
+bintrayPackage in ThisBuild := "laogm-silhouette"
+
+licenses in ThisBuild += ("Apache-2.0",
+  url("http://www.apache.org/licenses/LICENSE-2.0"))
 
 
 //lagomCassandraEnabled in ThisBuild := false
@@ -30,6 +33,7 @@ lazy val `lagom-silhouette` = (project in file("."))
 lazy val security = (project in file("security"))
 //  .settings(commonSettings: _*)
   .settings(
+  bintrayRepository := "releases",
     libraryDependencies ++= Seq(
       lagomScaladslApi,
       lagomScaladslServer % Optional,
@@ -39,6 +43,7 @@ lazy val security = (project in file("security"))
 
 lazy val `session-api` = (project in file("session-api"))
   .settings(
+    bintrayRepository := "releases",
     libraryDependencies ++= Seq(
       lagomScaladslApi,
       playJsonDerivedCodecs
@@ -48,6 +53,7 @@ lazy val `session-api` = (project in file("session-api"))
 lazy val `session-impl` = (project in file("session-impl"))
   .enablePlugins(LagomScala)
   .settings(
+    bintrayRepository := "releases",
     libraryDependencies ++= Seq(
       lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaBroker,
@@ -61,6 +67,7 @@ lazy val `session-impl` = (project in file("session-impl"))
 
 lazy val `user-api` = (project in file("user-api"))
   .settings(
+    bintrayRepository := "releases",
     libraryDependencies ++= Seq(
       lagomScaladslApi,
       playJsonDerivedCodecs
@@ -70,6 +77,7 @@ lazy val `user-api` = (project in file("user-api"))
 lazy val `user-impl` = (project in file("user-impl"))
   .enablePlugins(LagomScala)
   .settings(
+    bintrayRepository := "releases",
     libraryDependencies ++= Seq(
       lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaBroker,
@@ -84,6 +92,7 @@ lazy val `user-impl` = (project in file("user-impl"))
 
 lazy val `bookmark-api` = (project in file("bookmark-api"))
   .settings(
+    bintrayRepository := "releases",
     libraryDependencies ++= Seq(
       lagomScaladslApi,
       playJsonDerivedCodecs
@@ -97,6 +106,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
   .enablePlugins(PlayScala)
   .dependsOn(security,`session-api`, `user-api`)
   .settings(
+    bintrayRepository := "releases",
     resolvers += "Atlasian" at "https://maven.atlassian.com/content/repositories/atlassian-public",
     libraryDependencies ++= cats ++ Seq(
       lagomScaladslServer,
