@@ -1,0 +1,10 @@
+target/
+
+.idea/
+
+.settings/
+.classpath
+.project
+
+.cache-main
+.cache-tests
