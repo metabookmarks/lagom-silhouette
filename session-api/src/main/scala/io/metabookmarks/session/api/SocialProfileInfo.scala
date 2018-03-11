@@ -1,7 +1,5 @@
 package io.metabookmarks.session.api
 
-import java.util.UUID
-
 import play.api.libs.json.Json
 
 case class SocialProfileInfo(email: String, providerID: String, providerKey: String){

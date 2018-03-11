@@ -2,9 +2,9 @@ package io.metabookmarks.lagon.silhouette.models.daos
 
 import java.util.UUID
 
-
-import org.joda.time.DateTime
 import io.metabookmarks.lagon.silhouette.models.AuthToken
+import org.joda.time.DateTime
+
 import scala.concurrent.Future
 
 /**

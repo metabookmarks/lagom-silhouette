@@ -1,7 +1,5 @@
 package io.metabookmarks.session.impl
 
-import java.util.UUID
-
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import io.metabookmarks.session.api.SocialProfileInfo

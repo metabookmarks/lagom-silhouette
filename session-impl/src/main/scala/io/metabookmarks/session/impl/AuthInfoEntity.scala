@@ -1,10 +1,7 @@
 package io.metabookmarks.session.impl
 
-import akka.NotUsed
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, PersistentEntity}
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
-
-
 import play.api.libs.json.{Format, Json}
 
 

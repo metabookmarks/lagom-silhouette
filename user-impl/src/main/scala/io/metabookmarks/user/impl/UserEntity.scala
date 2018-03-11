@@ -1,11 +1,9 @@
 package io.metabookmarks.user.impl
 
-import java.util.UUID
 
-import akka.Done
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
-import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, PersistentEntity}
+import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
 import io.metabookmarks.user.api
 import io.metabookmarks.user.api.Profile
@@ -14,23 +12,9 @@ import play.api.libs.json.{Format, Json}
 import scala.collection.immutable.Seq
 
 /**
-  * This is an event sourced entity. It has a state, [[Option[User]], which
-  * stores what the greeting should be (eg, "Hello").
+  * This is an event sourced entity. It has a state, Map[String, Profile], which
+  * stores what the Profile by providerIds (google, twitter ...)
   *
-  * Event sourced entities are interacted with by sending them commands. This
-  * entity supports two commands, a [[UpdateProfile]] command, which is
-  * used to change the greeting, and a [[GetUser]] command, which is a read
-  * only command which returns a greeting to the name specified by the command.
-  *
-  * Commands get translated to events, and it's the events that get persisted by
-  * the entity. Each event will have an event handler registered for it, and an
-  * event handler simply applies an event to the current state. This will be done
-  * when the event is first created, and it will also be done when the entity is
-  * loaded from the database - each event will be replayed to recreate the state
-  * of the entity.
-  *
-  * This entity defines one event, the [[ProfileUpdated]] event,
-  * which is emitted when a [[UpdateProfile]] command is received.
   */
 class UserEntity extends PersistentEntity {
 
@@ -154,7 +138,7 @@ case class GetUser(provider: Option[String] = None) extends UserCommand[api.User
 /**
   * A command to switch the greeting message.
   *
-  * It has a reply type of [[Done]], which is sent back to the caller
+  * It has a reply type of api.User, which is sent back to the caller
   * when all the events emitted by this command are successfully persisted.
   */
 case class UpdateProfile(providerId: String, profile: Profile) extends UserCommand[api.User]

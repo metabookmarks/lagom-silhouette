@@ -12,7 +12,6 @@ import com.lightbend.lagom.scaladsl.api.security.ServicePrincipal
 import com.lightbend.lagom.scaladsl.api.transport._
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.typesafe.config.ConfigFactory
-import io.metabookmarks.security.ClientSecurity.authenticate
 
 import scala.concurrent.Future
 import scala.util.Try

@@ -1,16 +1,15 @@
 package io.metabookmarks.lagon.silhouette.models.services
 
-import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import io.metabookmarks.lagon.silhouette.models.SilhouetteUser
+import io.metabookmarks.security.ClientSecurity._
 import io.metabookmarks.session.{api => sessionApi}
 import io.metabookmarks.session.api.{SessionService, SocialProfileInfo => MTBLoginInfo}
 import io.metabookmarks.user.{api => userApi}
 import io.metabookmarks.user.api.{Profile, User, UserService, UserToCreate}
-import io.metabookmarks.security.ClientSecurity._
 
 import scala.concurrent.{ExecutionContext, Future}
 

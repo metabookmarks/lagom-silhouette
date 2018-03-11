@@ -4,12 +4,12 @@ package io.metabookmarks.lagon.silhouette.modules
   * Created by olivier.nouguier@gmail.com on 22/08/2017.
   */
 
+import com.mohiva.play.silhouette.api.{Environment, EventBus, SilhouetteProvider}
 import com.mohiva.play.silhouette.api.actions._
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.api.util._
-import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
 import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.providers._
@@ -33,10 +33,10 @@ import io.metabookmarks.session.api.SessionService
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import play.api.Configuration
-import play.api.i18n.{I18nComponents, MessagesApi}
+import play.api.i18n.I18nComponents
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
-import play.api.libs.openid.{OpenIdClient, OpenIDComponents, WsDiscovery, WsOpenIdClient}
+import play.api.libs.openid.{OpenIdClient, OpenIDComponents, WsDiscovery}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import play.filters.csrf.CSRFComponents

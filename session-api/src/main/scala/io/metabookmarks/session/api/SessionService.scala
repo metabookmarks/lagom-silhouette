@@ -1,10 +1,10 @@
 package io.metabookmarks.session.api
 
 import akka.NotUsed
+import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import com.lightbend.lagom.scaladsl.api.broker.Topic
 import com.lightbend.lagom.scaladsl.api.broker.kafka.{KafkaProperties, PartitionKeyStrategy}
 import com.lightbend.lagom.scaladsl.api.transport.Method
-import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import io.metabookmarks.security.SecurityHeaderFilter
 import play.api.libs.json._
 

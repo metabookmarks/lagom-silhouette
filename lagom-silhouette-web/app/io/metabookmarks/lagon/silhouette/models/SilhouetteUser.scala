@@ -1,8 +1,6 @@
 package io.metabookmarks.lagon.silhouette.models
 
-import java.util.UUID
-
-import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
+import com.mohiva.play.silhouette.api.Identity
 import io.metabookmarks.user.api.Profile
 
 /**

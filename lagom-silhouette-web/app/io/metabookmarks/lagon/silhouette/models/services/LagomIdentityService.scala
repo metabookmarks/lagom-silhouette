@@ -1,7 +1,5 @@
 package io.metabookmarks.lagon.silhouette.models.services
 
-import java.util.UUID
-
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import io.metabookmarks.lagon.silhouette.models.SilhouetteUser

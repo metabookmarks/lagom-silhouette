@@ -3,7 +3,7 @@ package io.metabookmarks.lagon.silhouette.models.daos
 import java.util.UUID
 
 import io.metabookmarks.lagon.silhouette.models.AuthToken
-import AuthTokenDAOImpl._
+import io.metabookmarks.lagon.silhouette.models.daos.AuthTokenDAOImpl._
 import org.joda.time.DateTime
 
 import scala.collection.mutable

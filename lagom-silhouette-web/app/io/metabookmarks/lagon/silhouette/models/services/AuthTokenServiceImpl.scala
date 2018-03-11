@@ -8,11 +8,10 @@ import io.metabookmarks.lagon.silhouette.models.AuthToken
 import io.metabookmarks.lagon.silhouette.models.daos.AuthTokenDAO
 import org.joda.time.DateTimeZone
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.language.postfixOps
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.language.postfixOps
 
 /**
  * Handles actions to auth tokens.

@@ -2,14 +2,13 @@ package io.metabookmarks.lagon.silhouette.models.daos
 
 import com.mohiva.play.silhouette.api.{AuthInfo, LoginInfo}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
+import io.metabookmarks.security.ClientSecurity._
 import io.metabookmarks.session.api.{SessionService, SocialProfileInfo}
 import play.api.libs.json.{Format, Json}
 
 import scala.concurrent.Future
-import scala.reflect.ClassTag
-import io.metabookmarks.security.ClientSecurity._
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.reflect.ClassTag
 
 /**
   * Created by olivier.nouguier@gmail.com on 14/10/2017.

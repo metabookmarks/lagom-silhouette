@@ -1,7 +1,5 @@
 package io.metabookmarks.user.api
 
-import java.util.UUID
-
 import play.api.libs.json.Json
 
 case class Profile(

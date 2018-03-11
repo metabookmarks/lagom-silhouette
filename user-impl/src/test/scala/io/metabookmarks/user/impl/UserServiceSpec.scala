@@ -1,11 +1,6 @@
 package io.metabookmarks.user.impl
 
-import java.util.UUID
-
-import com.lightbend.lagom.scaladsl.server.LocalServiceLocator
-import com.lightbend.lagom.scaladsl.testkit.ServiceTest
 import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
-import io.metabookmarks.user.api.UserService
 
 class UserServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
 /*

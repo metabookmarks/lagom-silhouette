@@ -6,9 +6,8 @@ import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentE
 import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import io.metabookmarks.security.ServerSecurity.authenticated
-import io.metabookmarks.session.api.SessionService
 import io.metabookmarks.session.api
-import io.metabookmarks.session.impl.{GetLoginInfo, GetOrCreateLoginInfo, SocialProfileEntity}
+import io.metabookmarks.session.api.SessionService
 
 import scala.collection.immutable.Seq
 
