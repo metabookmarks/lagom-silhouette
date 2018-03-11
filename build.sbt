@@ -105,7 +105,7 @@ lazy val `bookmark-api` = (project in file("bookmark-api"))
 val silhouetteVersion = "5.0.3"
 
 lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
-  .enablePlugins(PlayScala)
+  .enablePlugins(play.sbt.routes.RoutesCompiler, SbtTwirl)
   .dependsOn(security,`session-api`, `user-api`)
   .settings(
     bintrayRepository := "releases",
@@ -140,6 +140,8 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
     ),
  //   EclipseKeys.preTasks := Seq(compile in Compile),
+    TwirlKeys.templateImports ++= Seq("controllers._", "play.api.data._",  "play.api.i18n._", "play.api.mvc._", "views.html._"),
+    sources in (Compile, play.sbt.routes.RoutesKeys.routes) ++= ((unmanagedResourceDirectories in Compile).value * "silhouette.routes").get,
     plantUMLSource := baseDirectory.value / "diagrams",
   ).enablePlugins(PlantUMLPlugin, SbtWeb)
 

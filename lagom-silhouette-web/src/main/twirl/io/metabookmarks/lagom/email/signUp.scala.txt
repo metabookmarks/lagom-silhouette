@@ -1,0 +1,4 @@
+@(user: io.metabookmarks.lagom.silhouette.models.SilhouetteUser, url: String)(implicit messages: Messages)
+@messages("email.sign.up.hello", user.name.getOrElse("user"))
+
+@messages("email.sign.up.txt.text", url)

@@ -1,0 +1,38 @@
+@import io.metabookmarks.lagom.silhouette.utils.AssetResolver
+@(signInForm: Form[io.metabookmarks.lagom.silhouette.forms.SignInForm.Data], socialProviders: com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry, assetResolver: AssetResolver)(implicit request: RequestHeader, messages: Messages, webJarAssets: org.webjars.play.WebJarAssets, webJarsUtil: org.webjars.play.WebJarsUtil)
+
+
+@import b4.inline.fieldConstructor
+
+@io.metabookmarks.lagom.html.material(Messages("sign.in.title")) {
+    <fieldset class="col-md-6 col-md-offset-3">
+        <legend>@Messages("sign.in.credentials")</legend>
+        @helper.form(action = io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.submit()) {
+            @helper.CSRF.formField
+            @b4.email(signInForm("email"), '_hiddenLabel -> Messages("email"), 'placeholder -> Messages("email"), 'class -> "form-control input-lg")
+            @b4.password(signInForm("password"), '_hiddenLabel -> Messages("password"), 'placeholder -> Messages("password"), 'class -> "form-control input-lg")
+            @b4.checkbox(signInForm("rememberMe"), '_text -> Messages("remember.me"), 'checked -> true)
+            <div class="form-group">
+                <div>
+                    <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("sign.in")</button>
+                </div>
+            </div>
+        }
+
+        <div>
+            <p class="not-a-member">@Messages("not.a.member") <a href="@io.metabookmarks.lagom.silhouette.controllers.routes.SignUpController.view">@Messages("sign.up.now")</a> | <a href="@io.metabookmarks.lagom.silhouette.controllers.routes.ForgotPasswordController.view()" title="@Messages("forgot.your.password")">@Messages("forgot.your.password")</a></p>
+        </div>
+
+        @if(socialProviders.providers.nonEmpty) {
+            <div class="social-providers">
+                <p>@Messages("or.use.social")</p>
+                <div>
+                @for(p <- socialProviders.providers if p.id != "clef") {
+                    <a href="@io.metabookmarks.lagom.silhouette.controllers.routes.SocialAuthController.authenticate(p.id)" class="provider @p.id" title="@Messages(p.id)"><img src="@assetResolver.at(s"images/providers/${p.id}.png")" width="64px" height="64px" alt="@Messages(p.id)"></a>
+                }
+                </div>
+            </div>
+        }
+
+    </fieldset>
+}

@@ -1,0 +1,21 @@
+GET         /signUp                          io.metabookmarks.lagom.silhouette.controllers.SignUpController.view
+POST        /signUp                          io.metabookmarks.lagom.silhouette.controllers.SignUpController.submit
+
+
+GET         /signIn                         io.metabookmarks.lagom.silhouette.controllers.SilhouetteSignInController.view
+POST        /signIn                         io.metabookmarks.lagom.silhouette.controllers.SilhouetteSignInController.submit
+
+GET         /account/email/:email            io.metabookmarks.lagom.silhouette.controllers.ActivateAccountController.send(email: String)
+GET         /account/activate/:token         io.metabookmarks.lagom.silhouette.controllers.ActivateAccountController.activate(token: java.util.UUID)
+
+GET         /password/forgot                 io.metabookmarks.lagom.silhouette.controllers.ForgotPasswordController.view
+POST        /password/forgot                 io.metabookmarks.lagom.silhouette.controllers.ForgotPasswordController.submit
+GET         /password/reset/:token           io.metabookmarks.lagom.silhouette.controllers.ResetPasswordController.view(token: java.util.UUID)
+POST        /password/reset/:token           io.metabookmarks.lagom.silhouette.controllers.ResetPasswordController.submit(token: java.util.UUID)
+GET         /password/change                 io.metabookmarks.lagom.silhouette.controllers.ChangePasswordController.view
+POST        /password/change                 io.metabookmarks.lagom.silhouette.controllers.ChangePasswordController.submit
+
+
+GET         /authenticate/:provider          io.metabookmarks.lagom.silhouette.controllers.SocialAuthController.authenticate(provider)
+
+GET         /signOut                         io.metabookmarks.lagom.silhouette.controllers.SignOutController.signOut

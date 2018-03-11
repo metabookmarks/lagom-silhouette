@@ -1,0 +1,127 @@
+@(signInForm: play.api.data.Form[io.metabookmarks.lagom.silhouette.forms.SignInForm.Data], socialProviders: com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry, resolver: io.metabookmarks.lagom.silhouette.utils.AssetResolver  )(implicit request: play.api.mvc.RequestHeader, messages: play.api.i18n.Messages, webJarAssets: org.webjars.play.WebJarAssets, webJarsUtil: org.webjars.play.WebJarsUtil)
+
+@io.metabookmarks.lagom.html.material(Messages("sign.in.title")) {
+    <style>
+            .provider {
+                display: inline-block;
+                width: 64px;
+                height: 64px;
+                border-radius: 4px;
+                outline: none;
+            }
+
+            .facebook {
+                background: #3B5998;
+            }
+
+            .google {
+                background: #D14836;
+            }
+
+            .twitter {
+                background: #00ACED;
+            }
+
+            .yahoo {
+                background: #731A8B;
+            }
+
+            .xing {
+                background: #006567;
+            }
+
+            .vk {
+                background: #567ca4;
+            }
+
+            .social-providers,
+            .sign-in-now,
+            .already-member,
+            .not-a-member {
+                text-align: center;
+                margin-top: 20px;
+                margin-left: 20%;
+                margin-right: 20%;
+            }
+
+    </style>
+    <fieldset class="already-member">
+
+        <form action = "@io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.submit()" method="post">
+            @helper.CSRF.formField
+            <div class="mdc-form-field">
+                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                    <input id="email" name="email" type="text" class="mdc-textfield__input" />
+                    <label for="email" class="mdc-textfield__label">
+                    @Messages("email")
+                    </label>
+                    <div class="mdc-textfield__bottom-line"></div>
+                </div>
+            </div>
+            <br />
+            <div class="mdc-form-field">
+                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                    <input id="password" type="password" name="password" class="mdc-textfield__input" />
+                    <label for="password" class="mdc-textfield__label">
+                    @Messages("password")
+                    </label>
+                    <div class="mdc-textfield__bottom-line"></div>
+                </div>
+            </div>
+            <br />
+            <div class="mdc-form-field">
+                <div class="mdc-checkbox">
+                    <input type="checkbox"
+                    id="rememberMe"
+                    name="rememberMe"
+                    class="mdc-checkbox__native-control"/>
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark"
+                        viewBox="0 0 24 24">
+                            <path class="mdc-checkbox__checkmark__path"
+                            fill="none"
+                            stroke="white"
+                            d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
+                </div>
+                <label for="rememberMe" id="rememberMe">rememberMe</label>
+            </div>
+            <br />
+            <div class="mdc-form-field">
+                <button type="submit"
+                class="mdc-button
+                   mdc-button--raised
+                   mdc-ripple-surface"
+                data-mdc-auto-init="MDCRipple">
+                @Messages("sign.in")
+                </button>
+            </div>
+        </form>
+
+        <div>
+            <p class="not-a-member">@Messages("not.a.member") <a href="@io.metabookmarks.lagom.silhouette.controllers.routes.SignUpController.view">@Messages("sign.up.now")</a>
+                | <a href="@io.metabookmarks.lagom.silhouette.controllers.routes.ForgotPasswordController.view()" title="@Messages("forgot.your.password")">@Messages("forgot.your.password")</a></p>
+        </div>
+
+    </fieldset>
+
+
+    @if(socialProviders.providers.nonEmpty) {
+        <div>
+
+            <div class="social-providers">
+                <p>@Messages("or.use.social")</p>
+                <div>
+                @for(p <- socialProviders.providers if p.id != "clef") {
+                    <a href="@io.metabookmarks.lagom.silhouette.controllers.routes.SocialAuthController.authenticate(p.id)" class="provider @p.id" title="@Messages(p.id)"><img src="@resolver.at(s"images/providers/${p.id}.png")" width="64px" height="64px" alt="@Messages(p.id)"></a>
+                }
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+}

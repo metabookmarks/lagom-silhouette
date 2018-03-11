@@ -1,0 +1,24 @@
+@(signUpForm: play.api.data.Form[io.metabookmarks.lagom.silhouette.forms.SignUpForm.Data])(implicit request: RequestHeader, messages: Messages, webJarAssets: org.webjars.play.WebJarAssets, webJarsUtil: org.webjars.play.WebJarsUtil)
+
+@import b4.inline.fieldConstructor
+
+@io.metabookmarks.lagom.html.material(Messages("sign.up.title")) {
+    <fieldset class="col-md-6 col-md-offset-3">
+        <legend>@Messages("sign.up.account")</legend>
+        @helper.form(action = io.metabookmarks.lagom.silhouette.controllers.routes.SignUpController.submit()) {
+            @helper.CSRF.formField
+            @b4.text(signUpForm("firstName"), '_hiddenLabel -> Messages("first.name"), 'placeholder -> Messages("first.name"), 'class -> "form-control input-lg")
+            @b4.text(signUpForm("lastName"), '_hiddenLabel -> Messages("last.name"), 'placeholder -> Messages("last.name"), 'class -> "form-control input-lg")
+            @b4.text(signUpForm("email"), '_hiddenLabel -> Messages("email"), 'placeholder -> Messages("email"), 'class -> "form-control input-lg")
+            @io.metabookmarks.lagom.html.passwordStrength(signUpForm("password"), '_hiddenLabel -> Messages("password"), 'placeholder -> Messages("password"), 'class -> "form-control input-lg")
+            <div class="form-group">
+                <div>
+                    <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("sign.up")</button>
+                </div>
+            </div>
+            <div class="sign-in-now">
+                <p>@Messages("already.a.member") <a href="@io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view">@Messages("sign.in.now")</a></p>
+            </div>
+        }
+    </fieldset>
+}
