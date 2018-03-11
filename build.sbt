@@ -28,7 +28,8 @@ val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "1.0.1")
 
 lazy val `lagom-silhouette` = (project in file("."))
-  .settings(publishArtifact := false)
+  .settings(publish := {}
+  )
   .aggregate(security, `session-api`, `session-impl`, `user-api`, `user-impl`, `lagom-silhouette-web`)
 
 lazy val security = (project in file("security"))
