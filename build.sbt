@@ -25,9 +25,9 @@ val monocle = Seq(
 )
 
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "4.0.0"
-val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.0" % "provided"
+val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % Test
-val cats = Seq("org.typelevel" %% "cats-core" % "1.0.1")
+val cats = Seq("org.typelevel" %% "cats-core" % "1.1.0")
 
 val commonDockerSettings: Seq[sbt.Setting[_]] = Seq(
   version in Docker := version.value,
@@ -140,7 +140,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       jdbc,
       ehcache,
       openId,
-      "net.codingwell" %% "scala-guice" % "4.1.1",
+      "net.codingwell" %% "scala-guice" % "4.2.0",
       "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
       "com.typesafe.play" %% "play-mailer" % "6.0.1",
       "org.webjars" %% "webjars-play" % "2.6.3",
