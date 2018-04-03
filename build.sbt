@@ -62,7 +62,7 @@ lazy val `session-api` = (project in file("session-api"))
   ).dependsOn(security)
 
 lazy val `session-impl` = (project in file("session-impl"))
-  .enablePlugins(LagomScala)
+  .enablePlugins(LagomScala, SbtReactiveAppPlugin)
   .settings(commonDockerSettings)
   .settings(
     dockerEntrypoint ++= """-Dhttp.address="$(eval "echo $SESSIONSERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $SESSIONSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://friendservice@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
@@ -96,7 +96,7 @@ lazy val `user-api` = (project in file("user-api"))
   ).dependsOn(security)
 
 lazy val `user-impl` = (project in file("user-impl"))
-  .enablePlugins(LagomScala)
+  .enablePlugins(LagomScala, SbtReactiveAppPlugin)
   .settings(commonDockerSettings)
   .settings(
     dockerEntrypoint ++= """-Dhttp.address="$(eval "echo $USERSERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $USERSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://friendservice@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
@@ -164,35 +164,4 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
     plantUMLSource := baseDirectory.value / "diagrams",
   ).enablePlugins(PlantUMLPlugin, SbtWeb)
 
-/*
-val bindingVersion = "11.0.1"
 
-lazy val `web-client` = (project in file("web-client"))
-  .settings(
-    scalaJSUseMainModuleInitializer := true,
-    libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.4",
-      "com.thoughtworks.binding" %%% "dom" % bindingVersion,
-      "com.thoughtworks.binding" %%% "futurebinding" % bindingVersion,
-      "com.thoughtworks.binding" %%% "jspromisebinding" % bindingVersion,
-      "fr.hmil" %%% "roshttp" % "2.1.0"
-    ),
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
-  )
-  .enablePlugins(ScalaJSPlugin).
-  dependsOn(`web-shared-js`)
-
-lazy val `web-shared` = (crossProject.crossType(CrossType.Pure) in file("web-shared"))
-  .jsSettings(name := "web-shared-js")
-  .jvmSettings(name := "web-shared-jvm")
-.settings(
-  libraryDependencies ++= Seq(
-    "com.typesafe.play" %%% "play-json" % "2.6.7",
-    "org.julienrf" %%% "play-json-derived-codecs" % "4.0.0"
-  )
-)
-
-lazy val `web-shared-jvm` = `web-shared`.jvm
-lazy val `web-shared-js` = `web-shared`.js
-
- */
