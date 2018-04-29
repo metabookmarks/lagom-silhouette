@@ -3,7 +3,7 @@ import com.typesafe.sbt.packager.docker._
 organization in ThisBuild := "io.metabookmarks.lagom"
 
 // the Scala version that will be used for cross-compiled libraries
-scalaVersion in ThisBuild := "2.12.5"
+scalaVersion in ThisBuild := "2.12.6"
 
 bintrayOrganization in ThisBuild := Some("metabookmarks")
 
@@ -28,13 +28,6 @@ val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "4.0.
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "1.1.0")
-
-val commonDockerSettings: Seq[sbt.Setting[_]] = Seq(
-  version in Docker := version.value,
-  dockerBaseImage := "openjdk:8-jre-alpine",
-  dockerRepository := Some(BuildTarget.dockerRepository),
-  dockerUpdateLatest := true,
-)
 
 lazy val `lagom-silhouette` = (project in file("."))
   .settings(publish := {}
@@ -63,16 +56,6 @@ lazy val `session-api` = (project in file("session-api"))
 
 lazy val `session-impl` = (project in file("session-impl"))
   .enablePlugins(LagomScala, SbtReactiveAppPlugin)
-  .settings(commonDockerSettings)
-  .settings(
-    dockerEntrypoint ++= """-Dhttp.address="$(eval "echo $SESSIONSERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $SESSIONSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://friendservice@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
-    dockerCommands :=
-      dockerCommands.value.flatMap {
-        case ExecCmd("ENTRYPOINT", args@_*) => Seq(Cmd("ENTRYPOINT", args.mkString(" ")))
-        case c@Cmd("FROM", _) => Seq(c, ExecCmd("RUN", "/bin/sh", "-c", "apk add --no-cache bash && ln -sf /bin/bash /bin/sh"))
-        case v => Seq(v)
-      },
-  )
   .settings(
     bintrayRepository := "releases",
     libraryDependencies ++= Seq(
@@ -97,16 +80,6 @@ lazy val `user-api` = (project in file("user-api"))
 
 lazy val `user-impl` = (project in file("user-impl"))
   .enablePlugins(LagomScala, SbtReactiveAppPlugin)
-  .settings(commonDockerSettings)
-  .settings(
-    dockerEntrypoint ++= """-Dhttp.address="$(eval "echo $USERSERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $USERSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://friendservice@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
-    dockerCommands :=
-      dockerCommands.value.flatMap {
-        case ExecCmd("ENTRYPOINT", args@_*) => Seq(Cmd("ENTRYPOINT", args.mkString(" ")))
-        case c@Cmd("FROM", _) => Seq(c, ExecCmd("RUN", "/bin/sh", "-c", "apk add --no-cache bash && ln -sf /bin/bash /bin/sh"))
-        case v => Seq(v)
-      },
-  )
   .settings(
     bintrayRepository := "releases",
     libraryDependencies ++= Seq(
@@ -149,12 +122,12 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
 
       "com.iheart" %% "ficus" % "1.4.3",
 
-      "org.webjars" % "bootstrap" % "4.0.0",
+      "org.webjars" % "bootstrap" % "4.1.0",
       "org.ocpsoft.prettytime" % "prettytime" % "4.0.1.Final",
 
       "org.webjars" % "foundation" % "6.4.3",
       "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3",
-      "com.vmunier" %% "scalajs-scripts" % "1.1.1",
+      "com.vmunier" %% "scalajs-scripts" % "1.1.2",
       "org.sangria-graphql" %% "sangria" % "1.4.0",
       "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
     ),
