@@ -113,7 +113,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       jdbc,
       ehcache,
       openId,
-      "net.codingwell" %% "scala-guice" % "4.2.0",
+      "net.codingwell" %% "scala-guice" % "4.2.1",
       "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
       "com.typesafe.play" %% "play-mailer" % "6.0.1",
       "org.webjars" %% "webjars-play" % "2.6.3",
@@ -123,12 +123,12 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       "com.iheart" %% "ficus" % "1.4.3",
 
       "org.webjars" % "bootstrap" % "4.1.0",
-      "org.ocpsoft.prettytime" % "prettytime" % "4.0.1.Final",
+      "org.ocpsoft.prettytime" % "prettytime" % "4.0.2.Final",
 
       "org.webjars" % "foundation" % "6.4.3",
       "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3",
       "com.vmunier" %% "scalajs-scripts" % "1.1.2",
-      "org.sangria-graphql" %% "sangria" % "1.4.0",
+      "org.sangria-graphql" %% "sangria" % "1.4.1",
       "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
     ),
     //   EclipseKeys.preTasks := Seq(compile in Compile),
