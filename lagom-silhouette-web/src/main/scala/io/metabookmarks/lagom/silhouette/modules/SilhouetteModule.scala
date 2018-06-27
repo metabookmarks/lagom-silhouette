@@ -26,6 +26,7 @@ import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.daos.{DelegableAuthInfoDAO, InMemoryAuthInfoDAO}
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import com.softwaremill.macwire._
+import com.typesafe.config.Config
 import controllers._
 import io.metabookmarks.lagom.silhouette.controllers._
 import io.metabookmarks.lagom.silhouette.models.daos.OAuth2InfoDAO
@@ -34,6 +35,7 @@ import io.metabookmarks.lagom.silhouette.utils.AssetResolver
 import io.metabookmarks.lagom.silhouette.utils.auth.DefaultEnv
 import io.metabookmarks.session.api.SessionService
 import net.ceedubs.ficus.Ficus._
+import net.ceedubs.ficus.readers.ValueReader
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import org.webjars.play.{WebJarAssets, WebJarsUtil}
 import play.api.Configuration
@@ -290,4 +292,23 @@ trait SilhouetteModule
   lazy val lagomSocialAuthController = wire[SocialAuthController]
   lazy val lagomSignOutController = wire[SignOutController]
 
+
+  /**
+    * A very nested optional reader, to support these cases:
+    * Not set, set None, will use default ('Lax')
+    * Set to null, set Some(None), will use 'No Restriction'
+    * Set to a string value try to match, Some(Option(string))
+    */
+  implicit val sameSiteReader: ValueReader[Option[Option[Cookie.SameSite]]] =
+    (config: Config, path: String) => {
+      if (config.hasPathOrNull(path)) {
+        if (config.getIsNull(path))
+          Some(None)
+        else {
+          Some(Cookie.SameSite.parse(config.getString(path)))
+        }
+      } else {
+        None
+      }
+    }
 }
