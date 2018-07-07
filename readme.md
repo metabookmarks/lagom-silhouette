@@ -1,5 +1,21 @@
 # Lagom silhouette
 
+This is a [sihouette](https://www.silhouette.rocks/) integration attempt for lagom.
+  
+## Usage
+
+Add dependency
+
+```sbtshell libraryDependencies += "io.metabookmarks.lagom" %% "security" % securityVersion```
+
+Add in routes :
+
+```
+->          /auth                            silhouette.Routes
+
+```
+
+Then follow the [sihouette instructions](https://www.silhouette.rocks/docs).
 
 ## Kubernetes deployment (on progress)
 
