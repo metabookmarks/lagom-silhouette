@@ -4,7 +4,7 @@ import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
-import com.lightbend.rp.servicediscovery.lagom.scaladsl.LagomServiceLocatorComponents
+
 import com.softwaremill.macwire._
 import io.metabookmarks.session.api.SessionService
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -12,7 +12,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 class SessionLoader extends LagomApplicationLoader {
 
   override def load(context: LagomApplicationContext): LagomApplication =
-    new UserApplication(context) with LagomServiceLocatorComponents
+    new UserApplication(context)
 
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new UserApplication(context) with LagomDevModeComponents
