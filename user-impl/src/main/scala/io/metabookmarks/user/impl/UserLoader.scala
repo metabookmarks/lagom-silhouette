@@ -2,19 +2,18 @@ package io.metabookmarks.user.impl
 
 
 import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
+import com.lightbend.lagom.scaladsl.client.ConfigurationServiceLocatorComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
-
 import com.softwaremill.macwire._
-
 import io.metabookmarks.user.api.UserService
 import play.api.libs.ws.ahc.AhcWSComponents
 
 class UserLoader extends LagomApplicationLoader {
 
   override def load(context: LagomApplicationContext): LagomApplication =
-    new UserApplication(context)
+    new UserApplication(context) with ConfigurationServiceLocatorComponents
 
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new UserApplication(context) with LagomDevModeComponents

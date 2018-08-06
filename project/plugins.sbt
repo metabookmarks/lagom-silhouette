@@ -13,7 +13,7 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.22")
 addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.8")
 
 //addSbtPlugin("com.lightbend.conductr" % "sbt-conductr" % "2.7.2")
-//addSbtPlugin("com.lightbend.rp" % "sbt-reactive-app" % "1.3.1")
+addSbtPlugin("com.lightbend.rp" % "sbt-reactive-app" % "1.3.1")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.8")
 addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.4")
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2")

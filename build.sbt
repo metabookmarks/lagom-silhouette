@@ -83,7 +83,7 @@ lazy val `user-impl` = (project in file("user-impl"))
   .settings(
     bintrayRepository := "releases",
     libraryDependencies ++= Seq(
-      "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "0.17.0+20180718-1128",
+  //    "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "0.17.0+20180718-1128",
       lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaBroker,
       lagomScaladslTestKit,

@@ -40,7 +40,7 @@ import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import org.webjars.play.{WebJarAssets, WebJarsUtil}
 import play.api.Configuration
 import play.api.i18n.I18nComponents
-import play.api.libs.concurrent.Execution.Implicits._
+
 import play.api.libs.json.Json
 import play.api.libs.mailer.MailerClient
 import play.api.libs.openid.{OpenIdClient, OpenIDComponents, WsDiscovery}
@@ -48,6 +48,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import play.filters.csrf.CSRFComponents
 
+import scala.concurrent.ExecutionContext.Implicits.global
 
 trait SilhouetteModule
   extends I18nComponents
