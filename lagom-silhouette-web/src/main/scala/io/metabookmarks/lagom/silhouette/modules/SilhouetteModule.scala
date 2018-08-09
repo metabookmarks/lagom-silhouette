@@ -300,6 +300,8 @@ trait SilhouetteModule
     * Set to null, set Some(None), will use 'No Restriction'
     * Set to a string value try to match, Some(Option(string))
     */
+ // implicit val sameSiteReader: ValueReader[Option[Cookie.SameSite]] =
+   // ValueReader.relative(cfg => Cookie.SameSite.parse(cfg.as[String]))
   implicit val sameSiteReader: ValueReader[Option[Option[Cookie.SameSite]]] =
     (config: Config, path: String) => {
       if (config.hasPathOrNull(path)) {
