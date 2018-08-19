@@ -24,10 +24,10 @@ val monocle = Seq(
   "com.github.julien-truffaut" %% "monocle-law" % monocleVersion % "test"
 )
 
-val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "4.0.0"
+val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "4.0.1"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % Test
-val cats = Seq("org.typelevel" %% "cats-core" % "1.1.0")
+val cats = Seq("org.typelevel" %% "cats-core" % "1.2.0")
 
 lazy val `lagom-silhouette` = (project in file("."))
   .settings(publish := {}
@@ -123,14 +123,11 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
 
       "com.iheart" %% "ficus" % "1.4.3",
 
-      "org.webjars" % "bootstrap" % "4.1.1",
+      "org.webjars" % "bootstrap" % "4.1.3",
       "org.ocpsoft.prettytime" % "prettytime" % "4.0.2.Final",
 
       "org.webjars" % "foundation" % "6.4.3",
-      "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3",
-      "com.vmunier" %% "scalajs-scripts" % "1.1.2",
-      "org.sangria-graphql" %% "sangria" % "1.4.1",
-      "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
+      "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3"
     ),
     //   EclipseKeys.preTasks := Seq(compile in Compile),
     TwirlKeys.templateImports ++= Seq("controllers._", "play.api.data._", "play.api.i18n._", "play.api.mvc._", "views.html._"),
