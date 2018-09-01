@@ -132,7 +132,6 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
     //   EclipseKeys.preTasks := Seq(compile in Compile),
     TwirlKeys.templateImports ++= Seq("controllers._", "play.api.data._", "play.api.i18n._", "play.api.mvc._", "views.html._"),
     sources in(Compile, play.sbt.routes.RoutesKeys.routes) ++= ((unmanagedResourceDirectories in Compile).value * "silhouette.routes").get,
-    plantUMLSource := baseDirectory.value / "diagrams",
-  ).enablePlugins(PlantUMLPlugin, SbtWeb)
+  ).enablePlugins(SbtWeb)
 
 
