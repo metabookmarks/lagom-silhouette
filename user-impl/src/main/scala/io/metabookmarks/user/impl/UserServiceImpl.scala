@@ -3,7 +3,7 @@ package io.metabookmarks.user.impl
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.broker.Topic
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
-import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry}
+import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRef, PersistentEntityRegistry}
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import io.metabookmarks.security.ServerSecurity.authenticated
 import io.metabookmarks.user.api
@@ -16,20 +16,21 @@ import scala.concurrent.ExecutionContext
   */
 class UserServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implicit ec: ExecutionContext) extends UserService {
 
+  private def entity(email: String): PersistentEntityRef[UserCommand[_]] =
+    persistentEntityRegistry.refFor[UserEntity](email)
 
 
-  override def getUser(email: String) = authenticated(loginInfo => ServerServiceCall { _ =>
-    // Look up the metabookmarks entity for the given ID.
-    val ref = persistentEntityRegistry.refFor[UserEntity](email)
-    // Ask the entity the GetUser command.
-    ref.ask(GetUser())
-  })
+  override def getUser(email: String) = authenticated { _ =>
+    ServerServiceCall { _ =>
+      entity(email)
+        .ask(GetUser())
+    }
+  }
+
 
   override def updateProfile(email: String, providerId: String) = ServiceCall { profile =>
-    // Look up the metabookmarks entity for the given ID.
-    val ref = persistentEntityRegistry.refFor[UserEntity](email)
-    // Tell the entity to use the greeting message specified.
-    ref.ask(UpdateProfile(providerId, profile))
+    entity(email)
+      .ask(UpdateProfile(providerId, profile))
   }
 
 
@@ -47,14 +48,14 @@ class UserServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implic
     }
   }
 
-  private def newUser(email: String, create: AddProfile) = {
-    val ref = persistentEntityRegistry.refFor[UserEntity](email)
-    ref.ask(create)
-  }
+  private def newUser(email: String, create: AddProfile) =
+    entity(email)
+      .ask(create)
+
 
   override def insertUser(providerId: String, providerKey: String, email: String) = ServiceCall {
     user =>
-      newUser(email, AddProfile(providerId, Profile(providerKey=providerKey,
+      newUser(email, AddProfile(providerId, Profile(providerKey = providerKey,
         firstName = user.firstName,
         lastName = user.lastName,
         fullName = user.fullName,
@@ -71,7 +72,7 @@ class UserServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implic
 
   override def addProfile(providerId: String, providerKey: String) = authenticated(loginInfo => ServerServiceCall {
     user =>
-      newUser(user.email, AddProfile(providerId, Profile(providerKey=providerKey,
+      newUser(user.email, AddProfile(providerId, Profile(providerKey = providerKey,
         firstName = user.firstName,
         lastName = user.lastName,
         fullName = user.fullName,

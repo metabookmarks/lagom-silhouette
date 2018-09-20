@@ -33,27 +33,36 @@ class UserEntity extends PersistentEntity {
     */
   override def behavior: Behavior = {
     case profiles if profiles.isEmpty =>
-      Actions().
-        onReadOnlyCommand[GetUser, api.User] {
-        case (GetUser(provider), ctx, state) =>
-          ctx.commandFailed(NotFound(entityId))
+      emptyBehavior
+    case profiles =>
+      nonemptyBehavior(profiles)
+  }
 
-      }.onCommand[AddProfile, api.User] {
-        case (AddProfile(providerId, profile), ctx, state) =>
-          ctx.thenPersist(ProfileAdded(entityId, providerId, profile)) {
-            user =>
-              ctx.reply(buildUser(profiles, providerId, profile))
-          }
-      }.onEvent {
-        case (ProfileAdded(_, providerId, profile), state) =>
-          Map(providerId -> profile)
-      }
 
-    case profiles => Actions().onCommand[AddProfile, api.User] {
+  private val emptyBehavior: Actions =
+    Actions().
+      onReadOnlyCommand[GetUser, api.User] {
+      case (GetUser(_), ctx, _) =>
+        ctx.commandFailed(NotFound(entityId))
+
+    }.onCommand[AddProfile, api.User] {
+      case (AddProfile(providerId, profile), ctx, state) =>
+        ctx.thenPersist(ProfileAdded(entityId, providerId, profile)) {
+          _ =>
+            ctx.reply(buildUser(state, providerId, profile))
+        }
+    }.onEvent {
+      case (ProfileAdded(_, providerId, profile), _) =>
+        Map(providerId -> profile)
+    }
+
+
+  private val nonemptyBehavior: Actions =
+    Actions().onCommand[AddProfile, api.User] {
       case (AddProfile(providerId, profile), ctx, state) =>
         ctx.thenPersist(ProfileAdded(entityId, providerId, profile)) {
           user =>
-            ctx.reply(buildUser(profiles, providerId, profile))
+            ctx.reply(buildUser(state, providerId, profile))
         }
     }.onCommand[UpdateProfile, api.User] {
 
@@ -65,16 +74,16 @@ class UserEntity extends PersistentEntity {
           ProfileUpdated(entityId, providerId, profile)
         ) { _ =>
           // Then once the event is successfully persisted, we respond with done.
-          ctx.reply(buildUser(profiles, providerId, profile))
+          ctx.reply(buildUser(state, providerId, profile))
         }
 
     }.onReadOnlyCommand[GetUser, api.User] {
       case (GetUser(provider), ctx, state) =>
 
-        val providerId = provider.getOrElse(profiles.head._1)
+        val providerId = provider.getOrElse(state.head._1)
 
-        val profile = profiles(providerId)
-        ctx.reply(buildUser(profiles, providerId, profile)
+        val profile = state(providerId)
+        ctx.reply(buildUser(state, providerId, profile)
         )
     }.onEvent {
 
@@ -86,12 +95,11 @@ class UserEntity extends PersistentEntity {
       case (ProfileAdded(_, providerId, profile), state) =>
         state + (providerId -> profile)
     }
-  }
 
 
   private def buildUser(profiles: Map[String, Profile], providerId: String, profile: Profile) = {
     api.User(email = entityId, lastName = profile.lastName, firstName = profile.firstName, avatarURL = profile.avatarURL,
-      profiles = profiles + (providerId -> profile) )
+      profiles = profiles + (providerId -> profile))
   }
 }
 
