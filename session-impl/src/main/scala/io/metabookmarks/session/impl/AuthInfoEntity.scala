@@ -5,10 +5,6 @@ import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import play.api.libs.json.{Format, Json}
 
 
-
-
-
-
 /**
   * Created by olivier.nouguier@gmail.com on 16/10/2017.
   */
@@ -20,36 +16,36 @@ class AuthInfoEntity extends PersistentEntity {
 
   override def initialState = None
 
-  override def behavior = {
-    case d @ Some(data) =>
-      Actions().onReadOnlyCommand[GetAuthInfo.type, Option[Array[Byte]]]{
+  override def behavior: State => Actions = {
+    case Some(_) =>
+      Actions().onReadOnlyCommand[GetAuthInfo.type, State]{
         case (GetAuthInfo, ctx, state) =>
-          ctx.reply(d)
+          ctx.reply(state)
       }.onCommand[UpdateAuthInfo, Boolean]{
-        case (UpdateAuthInfo(id, payload), ctx, state) =>
+        case (UpdateAuthInfo(id, payload), ctx, _) =>
           ctx.thenPersist(AuthInfoUpdated(id, payload)){
             _ =>
               ctx.reply(true)
           }
       }.onCommand[SaveAuthInfo, Boolean]{
-        case (SaveAuthInfo(id, payload), ctx, state) =>
+        case (SaveAuthInfo(id, payload), ctx, _) =>
           ctx.thenPersist(AuthInfoUpdated(id, payload)){
             _ =>
               ctx.reply(true)
           }
       }.onCommand[DeleteAuthInfo , Boolean]{
-        case (DeleteAuthInfo(id), ctx, state) =>
+        case (DeleteAuthInfo(id), ctx, _) =>
           ctx.thenPersist(AuthInfoDeleted(id)){
             _ =>
               ctx.reply(true)
           }
       }.onEvent{
-        case (AuthInfoUpdated(id, payload), state) =>
+        case (AuthInfoUpdated(id, payload), _) =>
           Some(payload)
       }
     case None =>
       Actions().onReadOnlyCommand[GetAuthInfo.type, Option[Array[Byte]]]{
-        case (GetAuthInfo, ctx, state) =>
+        case (GetAuthInfo, ctx, _) =>
           ctx.invalidCommand("Not found")
       }.onCommand[AddAuthInfo, Boolean]{
         case (AddAuthInfo(id, payload), ctx, state) =>
@@ -64,7 +60,7 @@ class AuthInfoEntity extends PersistentEntity {
               ctx.reply(true)
           }
       }.onEvent{
-        case (AuthInfoUpdated(id, payload), state) =>
+        case (AuthInfoUpdated(_, payload), state) =>
           Some(payload)
       }
 
