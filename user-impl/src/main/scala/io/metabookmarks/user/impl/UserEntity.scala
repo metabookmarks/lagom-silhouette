@@ -7,6 +7,7 @@ import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
 import io.metabookmarks.user.api
 import io.metabookmarks.user.api.Profile
+import org.slf4j.LoggerFactory
 import play.api.libs.json.{Format, Json}
 
 import scala.collection.immutable.Seq
@@ -17,6 +18,9 @@ import scala.collection.immutable.Seq
   *
   */
 class UserEntity extends PersistentEntity {
+
+  private val logger = LoggerFactory.getLogger(classOf[UserEntity])
+
 
   override type Command = UserCommand[_]
   override type Event = UserEvent
@@ -47,12 +51,14 @@ class UserEntity extends PersistentEntity {
 
     }.onCommand[AddProfile, api.User] {
       case (AddProfile(providerId, profile), ctx, state) =>
+        logger.debug(s"AddProfile($providerId, $profile) for a new entity: $entityId")
         ctx.thenPersist(ProfileAdded(entityId, providerId, profile)) {
           _ =>
             ctx.reply(buildUser(state, providerId, profile))
         }
     }.onEvent {
       case (ProfileAdded(_, providerId, profile), _) =>
+        logger.debug(s"Profile added as first profile for $entityId")
         Map(providerId -> profile)
     }
 
@@ -60,39 +66,30 @@ class UserEntity extends PersistentEntity {
   private val nonemptyBehavior: Actions =
     Actions().onCommand[AddProfile, api.User] {
       case (AddProfile(providerId, profile), ctx, state) =>
+        logger.debug(s"AddProfile($providerId, $profile) for existing $entityId")
         ctx.thenPersist(ProfileAdded(entityId, providerId, profile)) {
-          user =>
+          _ =>
             ctx.reply(buildUser(state, providerId, profile))
         }
     }.onCommand[UpdateProfile, api.User] {
-
-      // Command handler for the UseGreetingMessage command
       case (UpdateProfile(providerId, profile), ctx, state) =>
-        // In response to this command, we want to first persist it as a
-        // GreetingMessageChanged event
-        ctx.thenPersist(
-          ProfileUpdated(entityId, providerId, profile)
-        ) { _ =>
-          // Then once the event is successfully persisted, we respond with done.
+        logger.debug(s"Prodile updated for $entityId")
+        ctx.thenPersist(ProfileUpdated(entityId, providerId, profile)) { _ =>
           ctx.reply(buildUser(state, providerId, profile))
         }
-
     }.onReadOnlyCommand[GetUser, api.User] {
       case (GetUser(provider), ctx, state) =>
 
         val providerId = provider.getOrElse(state.head._1)
 
         val profile = state(providerId)
-        ctx.reply(buildUser(state, providerId, profile)
-        )
+        ctx.reply(buildUser(state, providerId, profile))
     }.onEvent {
-
-      // Event handler for the GreetingMessageChanged event
       case (ProfileUpdated(id, providerId, profile), state) =>
-        // We simply update the current state to use the greeting message from
-        // the event.
+        logger.debug(s"Profile for $providerId updated in $entityId")
         state + (providerId -> profile)
       case (ProfileAdded(_, providerId, profile), state) =>
+        logger.debug(s"Profile for $providerId added in $entityId")
         state + (providerId -> profile)
     }
 

@@ -11,7 +11,7 @@ class SocialProfileEntity extends PersistentEntity {
   override type Event = LoginInfoEvent
   override type State = Option[SocialProfileInfo]
 
-  override def initialState = None
+  override def initialState: State = None
 
   override def behavior: Behavior = {
     case None =>
