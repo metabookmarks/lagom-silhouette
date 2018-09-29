@@ -16,74 +16,87 @@ class AuthInfoEntity extends PersistentEntity {
 
   override def initialState = None
 
-  override def behavior: State => Actions = {
+  override def behavior: Behavior = {
     case Some(_) =>
-      Actions().onReadOnlyCommand[GetAuthInfo.type, State]{
-        case (GetAuthInfo, ctx, state) =>
-          ctx.reply(state)
-      }.onCommand[UpdateAuthInfo, Boolean]{
-        case (UpdateAuthInfo(id, payload), ctx, _) =>
-          ctx.thenPersist(AuthInfoUpdated(id, payload)){
-            _ =>
-              ctx.reply(true)
-          }
-      }.onCommand[SaveAuthInfo, Boolean]{
-        case (SaveAuthInfo(id, payload), ctx, _) =>
-          ctx.thenPersist(AuthInfoUpdated(id, payload)){
-            _ =>
-              ctx.reply(true)
-          }
-      }.onCommand[DeleteAuthInfo , Boolean]{
-        case (DeleteAuthInfo(id), ctx, _) =>
-          ctx.thenPersist(AuthInfoDeleted(id)){
-            _ =>
-              ctx.reply(true)
-          }
-      }.onEvent{
-        case (AuthInfoUpdated(id, payload), _) =>
-          Some(payload)
-      }
+      presentBehavior
     case None =>
-      Actions().onReadOnlyCommand[GetAuthInfo.type, Option[Array[Byte]]]{
-        case (GetAuthInfo, ctx, _) =>
-          ctx.invalidCommand("Not found")
-      }.onCommand[AddAuthInfo, Boolean]{
-        case (AddAuthInfo(id, payload), ctx, state) =>
-          ctx.thenPersist(AuthInfoUpdated(id, payload)){
-            _ =>
-              ctx.reply(true)
-          }
-      }.onCommand[SaveAuthInfo, Boolean]{
-        case (SaveAuthInfo(id, payload), ctx, state) =>
-          ctx.thenPersist(AuthInfoUpdated(id, payload)){
-            _ =>
-              ctx.reply(true)
-          }
-      }.onEvent{
-        case (AuthInfoUpdated(_, payload), state) =>
-          Some(payload)
-      }
+      emptyBehavior
 
+  }
+
+  private val emptyBehavior: Actions = Actions()
+    .onReadOnlyCommand[GetAuthInfo.type, Option[Array[Byte]]] {
+    case (GetAuthInfo, ctx, _) =>
+      ctx.invalidCommand("Not found")
+  }.onCommand[AddAuthInfo, Boolean] {
+    case (AddAuthInfo(id, payload), ctx, _) =>
+      ctx.thenPersist(AuthInfoUpdated(id, payload)) {
+        _ =>
+          ctx.reply(true)
+      }
+  }.onCommand[SaveAuthInfo, Boolean] {
+    case (SaveAuthInfo(id, payload), ctx, _) =>
+      ctx.thenPersist(AuthInfoUpdated(id, payload)) {
+        _ =>
+          ctx.reply(true)
+      }
+  }.onEvent {
+    case (AuthInfoUpdated(_, payload), _) =>
+      Some(payload)
+  }
+
+
+  private val presentBehavior: Actions = Actions()
+    .onReadOnlyCommand[GetAuthInfo.type, Option[Array[Byte]]] {
+    case (GetAuthInfo, ctx, state) =>
+      ctx.reply(state)
+  }.onCommand[UpdateAuthInfo, Boolean] {
+    case (UpdateAuthInfo(id, payload), ctx, _) =>
+      ctx.thenPersist(AuthInfoUpdated(id, payload)) {
+        _ =>
+          ctx.reply(true)
+      }
+  }.onCommand[SaveAuthInfo, Boolean] {
+    case (SaveAuthInfo(id, payload), ctx, _) =>
+      ctx.thenPersist(AuthInfoUpdated(id, payload)) {
+        _ =>
+          ctx.reply(true)
+      }
+  }.onCommand[DeleteAuthInfo, Boolean] {
+    case (DeleteAuthInfo(id), ctx, _) =>
+      ctx.thenPersist(AuthInfoDeleted(id)) {
+        _ =>
+          ctx.reply(true)
+      }
+  }.onEvent {
+    case (AuthInfoUpdated(id, payload), _) =>
+      Some(payload)
   }
 }
 
 sealed trait AuthInfoCommand[R] extends ReplyType[R]
 
 case object GetAuthInfo extends AuthInfoCommand[Option[Array[Byte]]]
+
 case class AddAuthInfo(id: String, payload: Array[Byte]) extends AuthInfoCommand[Boolean]
+
 case class UpdateAuthInfo(id: String, payload: Array[Byte]) extends AuthInfoCommand[Boolean]
+
 case class SaveAuthInfo(id: String, payload: Array[Byte]) extends AuthInfoCommand[Boolean]
+
 case class DeleteAuthInfo(id: String) extends AuthInfoCommand[Boolean]
 
 
 object SessionEvent {
   val Tag = AggregateEventTag[SessionEvent]
 }
+
 sealed trait SessionEvent extends AggregateEvent[SessionEvent] {
   def aggregateTag = SessionEvent.Tag
 }
 
 case class AuthInfoUpdated(id: String, payload: Array[Byte]) extends SessionEvent
+
 case class AuthInfoDeleted(id: String) extends SessionEvent
 
 object AuthInfoDeleted {
