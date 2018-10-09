@@ -7,8 +7,6 @@ scalaVersion in ThisBuild := "2.12.7"
 
 bintrayOrganization in ThisBuild := Some("metabookmarks")
 
-bintrayPackage in ThisBuild := "laogm-silhouette"
-
 licenses in ThisBuild += ("Apache-2.0",
   url("http://www.apache.org/licenses/LICENSE-2.0"))
 
