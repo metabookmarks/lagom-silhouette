@@ -3,7 +3,7 @@ import com.typesafe.sbt.packager.docker._
 organization in ThisBuild := "io.metabookmarks.lagom"
 
 // the Scala version that will be used for cross-compiled libraries
-scalaVersion in ThisBuild := "2.12.7"
+scalaVersion in ThisBuild := "2.12.8"
 
 bintrayOrganization in ThisBuild := Some("metabookmarks")
 
