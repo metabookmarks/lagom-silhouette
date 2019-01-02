@@ -112,7 +112,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       jdbc,
       ehcache,
       openId,
-      "net.codingwell" %% "scala-guice" % "4.2.1",
+      "net.codingwell" %% "scala-guice" % "4.2.2",
       "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
       "com.typesafe.play" %% "play-mailer" % "6.0.1",
       "org.webjars" %% "webjars-play" % "2.6.3",
@@ -121,7 +121,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
 
       "com.iheart" %% "ficus" % "1.4.4",
 
-      "org.webjars" % "bootstrap" % "4.1.3",
+      "org.webjars" % "bootstrap" % "4.2.1",
       "org.ocpsoft.prettytime" % "prettytime" % "4.0.2.Final",
 
       "org.webjars" % "foundation" % "6.4.3",
