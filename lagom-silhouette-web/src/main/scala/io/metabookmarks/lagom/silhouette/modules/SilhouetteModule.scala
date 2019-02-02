@@ -4,6 +4,8 @@ package io.metabookmarks.lagom.silhouette.modules
   * Created by olivier.nouguier@gmail.com on 22/08/2017.
   */
 
+import com.lightbend.lagom.scaladsl.api.LagomConfigComponent
+import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.mohiva.play.silhouette.api.{Environment, EventBus, SilhouetteProvider}
 import com.mohiva.play.silhouette.api.actions._
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
@@ -30,17 +32,17 @@ import com.typesafe.config.Config
 import controllers._
 import io.metabookmarks.lagom.silhouette.controllers._
 import io.metabookmarks.lagom.silhouette.models.daos.OAuth2InfoDAO
-import io.metabookmarks.lagom.silhouette.models.services.{AuthTokenService, LagomIdentityService}
-import io.metabookmarks.lagom.silhouette.utils.AssetResolver
+import io.metabookmarks.lagom.silhouette.models.services.{AuthTokenService, IdentityServiceImpl, LagomIdentityService}
+import io.metabookmarks.lagom.silhouette.utils.{AssetResolver, CustomSecuredErrorHandler, CustomUnsecuredErrorHandler}
 import io.metabookmarks.lagom.silhouette.utils.auth.DefaultEnv
 import io.metabookmarks.session.api.SessionService
+import io.metabookmarks.user.api.UserService
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ValueReader
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import org.webjars.play.{WebJarAssets, WebJarsUtil}
 import play.api.Configuration
 import play.api.i18n.I18nComponents
-
 import play.api.libs.json.Json
 import play.api.libs.mailer.MailerClient
 import play.api.libs.openid.{OpenIdClient, OpenIDComponents, WsDiscovery}
@@ -52,6 +54,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 trait SilhouetteModule
   extends I18nComponents
+    with LagomConfigComponent
+    with LagomServiceClientComponents
   with SecuredActionComponents
   with UnsecuredActionComponents
   with UserAwareActionComponents
@@ -59,14 +63,31 @@ trait SilhouetteModule
   with CSRFComponents
 {
 
+  def onUnsecured: Result
+
+  override def securedBodyParser = new BodyParsers.Default(controllerComponents.parsers)
+  override def unsecuredBodyParser = new BodyParsers.Default(controllerComponents.parsers)
+  override def userAwareBodyParser = new BodyParsers.Default(controllerComponents.parsers)
+
+  override def unsecuredErrorHandler = new CustomUnsecuredErrorHandler(onUnsecured)
+  override def securedErrorHandler = new CustomSecuredErrorHandler(controllerComponents.messagesApi)
+
+
   //def configuration: Configuration
 
   def wsClient: WSClient
 
   //def openIdClient: OpenIdClient
 
-  def identityService: LagomIdentityService
-  def sessionService: SessionService
+  val prefix = "/"
+
+  lazy val silhouetteRoute = wire[silhouette.Routes]
+
+  lazy val identityService = wire[IdentityServiceImpl]
+
+  lazy val sessionService = serviceClient.implement[SessionService]
+
+  lazy val userService = serviceClient.implement[UserService]
 
   lazy val testFormat = Json.format[OAuth2Info]
 
