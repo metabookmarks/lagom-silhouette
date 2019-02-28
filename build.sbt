@@ -24,7 +24,7 @@ val monocle = Seq(
 
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "5.0.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided"
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % Test
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.6" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "1.6.0")
 
 lazy val `lagom-silhouette` = (project in file("."))
@@ -113,15 +113,15 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       ehcache,
       openId,
       "net.codingwell" %% "scala-guice" % "4.2.2",
-      "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.1" % Test,
       "com.typesafe.play" %% "play-mailer" % "7.0.0",
-      "org.webjars" %% "webjars-play" % "2.6.3",
+      "org.webjars" %% "webjars-play" % "2.7.0",
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
-      "com.adrianhurt" %% "play-bootstrap" % "1.2-P26-B4-RC2",
+      "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4",
 
       "com.iheart" %% "ficus" % "1.4.4",
 
-      "org.webjars" % "bootstrap" % "4.2.1",
+      "org.webjars" % "bootstrap" % "4.3.1",
       "org.ocpsoft.prettytime" % "prettytime" % "4.0.2.Final",
 
       "org.webjars" % "foundation" % "6.4.3",

@@ -1,7 +1,7 @@
 @import io.metabookmarks.lagom.silhouette.utils.AssetResolver
 @(signInForm: Form[io.metabookmarks.lagom.silhouette.forms.SignInForm.Data], socialProviders: com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry, assetResolver: AssetResolver)(implicit request: RequestHeader, messages: Messages, webJarAssets: org.webjars.play.WebJarAssets, webJarsUtil: org.webjars.play.WebJarsUtil)
 
-
+@***
 @import b4.inline.fieldConstructor
 
 @io.metabookmarks.lagom.html.material(Messages("sign.in.title")) {
@@ -36,3 +36,4 @@
 
     </fieldset>
 }
+**@
