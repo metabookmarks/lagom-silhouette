@@ -23,7 +23,7 @@ val monocle = Seq(
 )
 
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "5.0.0"
-val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided"
+val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.2" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.6" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "1.6.0")
 
@@ -112,7 +112,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       jdbc,
       ehcache,
       openId,
-      "net.codingwell" %% "scala-guice" % "4.2.2",
+      "net.codingwell" %% "scala-guice" % "4.2.3",
       "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.1" % Test,
       "com.typesafe.play" %% "play-mailer" % "7.0.0",
       "org.webjars" %% "webjars-play" % "2.7.0",
