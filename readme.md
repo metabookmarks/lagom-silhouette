@@ -1,6 +1,6 @@
 # Lagom silhouette
 
-This is a [sihouette](https://www.silhouette.rocks/) integration attempt for lagom.
+This is a [sihouette](https://www.silhouette.rocks/) on progress integration attempt for lagom.
   
 ## Usage
 
