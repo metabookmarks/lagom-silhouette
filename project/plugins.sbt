@@ -3,7 +3,7 @@ resolvers += Resolver.bintrayIvyRepo("metabookmarks", "sbt-plugin-releases")
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.4.1")
 
 // The Lagom plugin
-addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.5.0-RC2")
+addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.5.0")
 
 addSbtPlugin("com.lightbend.rp" % "sbt-reactive-app" % "1.3.1")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
