@@ -1,5 +1,9 @@
 import com.typesafe.sbt.packager.docker._
 
+
+
+resolvers in ThisBuild += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+
 organization in ThisBuild := "io.metabookmarks.lagom"
 
 // the Scala version that will be used for cross-compiled libraries
@@ -93,7 +97,7 @@ lazy val `user-impl` = (project in file("user-impl"))
   .dependsOn(`user-api`)
 
 
-val silhouetteVersion = "5.0.7"
+val silhouetteVersion = "6.0.0-SNAPSHOT"
 
 lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
   .enablePlugins(play.sbt.routes.RoutesCompiler, SbtTwirl)
