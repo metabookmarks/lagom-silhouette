@@ -97,7 +97,7 @@ lazy val `user-impl` = (project in file("user-impl"))
   .dependsOn(`user-api`)
 
 
-val silhouetteVersion = "6.0.0-SNAPSHOT"
+val silhouetteVersion = "5.0.7"
 
 lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
   .enablePlugins(play.sbt.routes.RoutesCompiler, SbtTwirl)
@@ -117,13 +117,12 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       ehcache,
       openId,
       "net.codingwell" %% "scala-guice" % "4.2.3",
-      "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.1" % Test,
       "com.typesafe.play" %% "play-mailer" % "7.0.0",
       "org.webjars" %% "webjars-play" % "2.7.0",
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
       "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4",
 
-      "com.iheart" %% "ficus" % "1.4.5",
+      "com.iheart" %% "ficus" % "1.4.6",
 
       "org.webjars" % "bootstrap" % "4.3.1",
       "org.ocpsoft.prettytime" % "prettytime" % "4.0.2.Final",
