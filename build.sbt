@@ -26,7 +26,7 @@ val monocle = Seq(
   "com.github.julien-truffaut" %% "monocle-law" % monocleVersion % "test"
 )
 
-val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "5.0.0"
+val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "6.0.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.8" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "1.6.1")
