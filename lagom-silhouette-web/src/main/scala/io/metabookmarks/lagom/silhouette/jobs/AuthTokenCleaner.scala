@@ -16,10 +16,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * @param service The auth token service implementation.
  * @param clock The clock implementation.
  */
-class AuthTokenCleaner @Inject() (
-  service: AuthTokenService,
-  clock: Clock)
-  extends Actor with Logger {
+class AuthTokenCleaner @Inject()(service: AuthTokenService, clock: Clock) extends Actor with Logger {
 
   /**
    * Process the received messages.
@@ -31,19 +28,23 @@ class AuthTokenCleaner @Inject() (
       msg.append("=================================\n")
       msg.append("Start to cleanup auth tokens\n")
       msg.append("=================================\n")
-      service.clean.map { deleted =>
-        val seconds = (clock.now.getMillis - start) / 1000
-        msg.append("Total of %s auth tokens(s) were deleted in %s seconds".format(deleted.length, seconds)).append("\n")
-        msg.append("=================================\n")
-
-        msg.append("=================================\n")
-        logger.info(msg.toString)
-      }.recover {
-        case e =>
-          msg.append("Couldn't cleanup auth tokens because of unexpected error\n")
+      service.clean
+        .map { deleted =>
+          val seconds = (clock.now.getMillis - start) / 1000
+          msg
+            .append("Total of %s auth tokens(s) were deleted in %s seconds".format(deleted.length, seconds))
+            .append("\n")
           msg.append("=================================\n")
-          logger.error(msg.toString, e)
-      }
+
+          msg.append("=================================\n")
+          logger.info(msg.toString)
+        }
+        .recover {
+          case e =>
+            msg.append("Couldn't cleanup auth tokens because of unexpected error\n")
+            msg.append("=================================\n")
+            logger.error(msg.toString, e)
+        }
   }
 }
 

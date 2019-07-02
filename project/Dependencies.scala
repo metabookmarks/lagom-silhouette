@@ -7,7 +7,7 @@ object Version {
 }
 
 object Library {
-  val constructr          = "de.heikoseeberger"        %% "constructr"                        % Version.constructr
+  val constructr = "de.heikoseeberger" %% "constructr" % Version.constructr
   val constructrZooKeeper = "com.lightbend.constructr" %% "constructr-coordination-zookeeper" % Version.constructrZooKeeper
-  val serviceLocatorDns   = "com.lightbend"            %% "lagom14-java-service-locator-dns"  % Version.serviceLocatorDns
+  val serviceLocatorDns = "com.lightbend" %% "lagom14-java-service-locator-dns" % Version.serviceLocatorDns
 }

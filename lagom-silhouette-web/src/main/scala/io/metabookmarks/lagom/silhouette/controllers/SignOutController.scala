@@ -14,34 +14,34 @@ import play.api.mvc.{AbstractController, AnyContent, Call, ControllerComponents}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SignOutController @Inject()(
-                                   cc: ControllerComponents,
-                                   override val messagesApi: MessagesApi,
-                                   silhouette: Silhouette[DefaultEnv],
-                                   userService: LagomIdentityService,
-                                   onSuccess: Call,
-                                   socialProviderRegistry: SocialProviderRegistry,
-                                   implicit val webJarUtil: WebJarsUtil,
-                                   implicit val webJarAssets: WebJarAssets)
-  extends AbstractController(cc) with I18nSupport {
+class SignOutController @Inject()(cc: ControllerComponents,
+                                  override val messagesApi: MessagesApi,
+                                  silhouette: Silhouette[DefaultEnv],
+                                  userService: LagomIdentityService,
+                                  onSuccess: Call,
+                                  socialProviderRegistry: SocialProviderRegistry,
+                                  implicit val webJarUtil: WebJarsUtil,
+                                  implicit val webJarAssets: WebJarAssets)
+    extends AbstractController(cc)
+    with I18nSupport {
+
   /**
-    * Handles the Sign Out action.
-    *
-    * @return The result to display.
-    */
-  def signOut = silhouette.UserAwareAction.async {
-    implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
-      request.identity.map {
-        user =>
-          userService.retrieve(user.email).flatMap {
-            uo =>
-              val result = Redirect(onSuccess)
-              silhouette.env.eventBus.publish(LogoutEvent(uo.get, request))
-              silhouette.env.authenticatorService.discard(request.authenticator.get, result)
+   * Handles the Sign Out action.
+   *
+   * @return The result to display.
+   */
+  def signOut = silhouette.UserAwareAction.async { implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
+    request.identity
+      .map { user =>
+        userService.retrieve(user.email).flatMap { uo =>
+          val result = Redirect(onSuccess)
+          silhouette.env.eventBus.publish(LogoutEvent(uo.get, request))
+          silhouette.env.authenticatorService.discard(request.authenticator.get, result)
 
-          }
+        }
 
-      }.getOrElse(Future.successful(Redirect(onSuccess)))
+      }
+      .getOrElse(Future.successful(Redirect(onSuccess)))
 
   }
 }

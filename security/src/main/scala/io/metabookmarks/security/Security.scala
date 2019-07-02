@@ -16,7 +16,6 @@ import com.typesafe.config.ConfigFactory
 import scala.concurrent.Future
 import scala.util.Try
 
-
 sealed trait UserPrincipal extends Principal {
   val userId: String
 
@@ -29,7 +28,9 @@ object UserPrincipal {
 
   case class ServicelessUserPrincipal(userId: String) extends UserPrincipal
 
-  case class UserServicePrincipal(userId: String, servicePrincipal: ServicePrincipal) extends UserPrincipal with ServicePrincipal {
+  case class UserServicePrincipal(userId: String, servicePrincipal: ServicePrincipal)
+      extends UserPrincipal
+      with ServicePrincipal {
     override def serviceName: String = servicePrincipal.serviceName
   }
 
@@ -59,21 +60,20 @@ sealed trait Crypter {
   }
 
   /**
-    * Decrypts a string.
-    *
-    * @param value The value to decrypt.
-    * @return The plain text string.
-    */
-  def decrypt(value: String): Option[String] = {
+   * Decrypts a string.
+   *
+   * @param value The value to decrypt.
+   * @return The plain text string.
+   */
+  def decrypt(value: String): Option[String] =
     value.split("-", 2) match {
       case Array(version, data) if version == "1" => Try(decryptVersion1(data, key)).toOption
       case _ => None
     }
-  }
 
   /**
-    * Generates the SecretKeySpec, given the private key and the algorithm.
-    */
+   * Generates the SecretKeySpec, given the private key and the algorithm.
+   */
   private def secretKeyWithSha256(privateKey: String, algorithm: String) = {
     val messageDigest = MessageDigest.getInstance("SHA-256")
     messageDigest.update(privateKey.getBytes("UTF-8"))
@@ -114,9 +114,7 @@ object SecurityHeaderFilter extends HeaderFilter with Crypter {
   lazy val Composed = HeaderFilter.composite(SecurityHeaderFilter, UserAgentHeaderFilter)
 }
 
-
 object ServerSecurity {
-
 
   def authenticated[Request, Response](serviceCall: String => ServerServiceCall[Request, Response]) =
     ServerServiceCall.compose { requestHeader =>
@@ -133,8 +131,8 @@ object ServerSecurity {
 object ClientSecurity {
 
   /**
-    * Authenticate a client request.
-    */
+   * Authenticate a client request.
+   */
   def authenticate(userProfile: String): RequestHeader => RequestHeader = { request =>
     request.withPrincipal(UserPrincipal.of(userProfile, request.principal))
   }
@@ -154,8 +152,7 @@ object ClientSecurity {
     def secureInvoke(): Future[O] = secureInvoke(SERVICE_UUID)
 
     def secureInvoke(email: String): Future[O] =
-      sc.handleRequestHeader(authenticate(email))
-        .invoke
+      sc.handleRequestHeader(authenticate(email)).invoke
 
   }
 

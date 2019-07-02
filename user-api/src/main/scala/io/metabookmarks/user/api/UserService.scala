@@ -5,6 +5,7 @@ import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import com.lightbend.lagom.scaladsl.api.broker.Topic
 import com.lightbend.lagom.scaladsl.api.broker.kafka.{KafkaProperties, PartitionKeyStrategy}
 import com.lightbend.lagom.scaladsl.api.transport.Method
+import io.metabookmarks.lagom.domain.Event
 import io.metabookmarks.security.SecurityHeaderFilter
 import play.api.libs.json._
 
@@ -13,13 +14,12 @@ object UserService {
 }
 
 /**
-  * The metabookmarks service interface.
-  * <p>
-  * This describes everything that Lagom needs to know about how to serve and
-  * consume the MetabookmarksService.
-  */
+ * The metabookmarks service interface.
+ * <p>
+ * This describes everything that Lagom needs to know about how to serve and
+ * consume the MetabookmarksService.
+ */
 trait UserService extends Service {
-
 
   def insertUser(providerId: String, providerKey: String, email: String): ServiceCall[User, User]
 
@@ -30,8 +30,8 @@ trait UserService extends Service {
   def updateProfile(email: String, providerId: String): ServiceCall[Profile, User]
 
   /**
-    * This gets published to Kafka.
-    */
+   * This gets published to Kafka.
+   */
   def usersTopic(): Topic[UserEvent]
 
   override final def descriptor = {
@@ -74,25 +74,23 @@ trait UserService extends Service {
   }
 }
 
-case class UserToCreate( email: String, fullName: Option[String], firstName: Option[String], lastName: Option[String], avatarURL: Option[String], activated: Boolean)
-
-object UserToCreate {
-  implicit val format: Format[UserToCreate] = Json.format
-}
-
+@Event
+case class UserToCreate(email: String,
+                        fullName: Option[String],
+                        firstName: Option[String],
+                        lastName: Option[String],
+                        avatarURL: Option[String],
+                        activated: Boolean)
+@Event
 sealed trait UserEvent {
   def email: String
 }
 
-case class UserUpdated(email: String, fullName: Option[String], firstName: Option[String], lastName: Option[String], avatarURL: Option[String], activated: Boolean) extends UserEvent
-
-object UserUpdated {
-  implicit val format: Format[UserUpdated] = Json.format[UserUpdated]
-}
-
-import julienrf.json.derived
-
-object UserEvent {
-  implicit val format: Format[UserEvent] =
-    derived.flat.oformat((__ \ "type").format[String])
-}
+@Event
+case class UserUpdated(email: String,
+                       fullName: Option[String],
+                       firstName: Option[String],
+                       lastName: Option[String],
+                       avatarURL: Option[String],
+                       activated: Boolean)
+    extends UserEvent

@@ -19,7 +19,7 @@ import scala.language.postfixOps
  * @param authTokenDAO The auth token DAO implementation.
  * @param clock The clock instance.
  */
-class AuthTokenServiceImpl @Inject() (authTokenDAO: AuthTokenDAO, clock: Clock) extends AuthTokenService {
+class AuthTokenServiceImpl @Inject()(authTokenDAO: AuthTokenDAO, clock: Clock) extends AuthTokenService {
 
   /**
    * Creates a new auth token and saves it in the backing store.
@@ -29,7 +29,8 @@ class AuthTokenServiceImpl @Inject() (authTokenDAO: AuthTokenDAO, clock: Clock) 
    * @return The saved auth token.
    */
   def create(email: String, expiry: FiniteDuration = 5 minutes) = {
-    val token = AuthToken(UUID.randomUUID(), email, clock.now.withZone(DateTimeZone.UTC).plusSeconds(expiry.toSeconds.toInt))
+    val token =
+      AuthToken(UUID.randomUUID(), email, clock.now.withZone(DateTimeZone.UTC).plusSeconds(expiry.toSeconds.toInt))
     authTokenDAO.save(token)
   }
 

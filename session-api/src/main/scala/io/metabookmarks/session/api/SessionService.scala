@@ -5,6 +5,7 @@ import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import com.lightbend.lagom.scaladsl.api.broker.Topic
 import com.lightbend.lagom.scaladsl.api.broker.kafka.{KafkaProperties, PartitionKeyStrategy}
 import com.lightbend.lagom.scaladsl.api.transport.Method
+import io.metabookmarks.lagom.domain.Event
 import io.metabookmarks.security.SecurityHeaderFilter
 import play.api.libs.json._
 
@@ -28,30 +29,29 @@ trait SessionService extends Service {
 
   def getOrCreateLoginInfo: ServiceCall[SocialProfileInfo, SocialProfileInfo]
 
-  def sessionsTopic() : Topic[SessionEvent]
-
+  def sessionsTopic(): Topic[SessionEvent]
 
   override final def descriptor = {
     import Service._
 
     named("session")
-       .withCalls(
-         restCall(Method.POST, "/api/auth/:id", addAuthInfo _),
-         restCall(Method.PUT, "/api/auth/:id", updateAuthInfo _),
-         restCall(Method.GET, "/api/auth/:id", getAuthInfo _),
-         restCall(Method.POST, "/api/sauth/:id", saveAuthInfo _),
-         restCall(Method.DELETE, "/api/auth/:id", deleteAuthInfo _),
-         restCall(Method.GET, "/api/login/:id", getLoginInfo _),
-         restCall(Method.POST, "/api/login", getOrCreateLoginInfo)
-       )
+      .withCalls(
+        restCall(Method.POST, "/api/auth/:id", addAuthInfo _),
+        restCall(Method.PUT, "/api/auth/:id", updateAuthInfo _),
+        restCall(Method.GET, "/api/auth/:id", getAuthInfo _),
+        restCall(Method.POST, "/api/sauth/:id", saveAuthInfo _),
+        restCall(Method.DELETE, "/api/auth/:id", deleteAuthInfo _),
+        restCall(Method.GET, "/api/login/:id", getLoginInfo _),
+        restCall(Method.POST, "/api/login", getOrCreateLoginInfo)
+      )
       .withTopics(
         topic(SessionService.TOPIC_NAME, sessionsTopic _)
-            .addProperty(
-              KafkaProperties.partitionKeyStrategy,
-              PartitionKeyStrategy[SessionEvent](_.id)
-            )
+          .addProperty(
+            KafkaProperties.partitionKeyStrategy,
+            PartitionKeyStrategy[SessionEvent](_.id)
+          )
       )
-        .withAutoAcl(true)
+      .withAutoAcl(true)
       .withHeaderFilter(SecurityHeaderFilter.Composed)
   }
   import play.api.libs.json._
@@ -67,6 +67,7 @@ trait SessionService extends Service {
   }
 }
 
+@Event
 sealed trait SessionEvent {
   def id: String
 }
@@ -75,15 +76,3 @@ case class SessionCreated(id: String) extends SessionEvent
 case class AuthInfoCreated(id: String) extends SessionEvent
 case class AuthInfoUpdated(id: String) extends SessionEvent
 case class AuthInfoDeleted(id: String) extends SessionEvent
-
-object SessionCreated {
-  implicit val format: Format[SessionCreated] = Json.format
-}
-
-
-import julienrf.json.derived
-
-object SessionEvent {
-  implicit val format: Format[SessionEvent] =
-    derived.flat.oformat((__ \ "type").format[String])
-}

@@ -21,7 +21,7 @@ class SessionLoader extends LagomApplicationLoader {
 }
 
 abstract class UserApplication(context: LagomApplicationContext)
-  extends LagomApplication(context)
+    extends LagomApplication(context)
     with CassandraPersistenceComponents
     with LagomKafkaComponents
     with AhcWSComponents {

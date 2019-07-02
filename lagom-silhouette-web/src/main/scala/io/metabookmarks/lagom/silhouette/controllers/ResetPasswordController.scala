@@ -27,18 +27,18 @@ import scala.concurrent.{ExecutionContext, Future}
  * @param authTokenService       The auth token service implementation.
  * @param webJarAssets           The WebJar assets locator.
  */
-class ResetPasswordController @Inject()(
-                                          cc: ControllerComponents,
-                                          override val messagesApi: MessagesApi,
-                                          silhouette: Silhouette[DefaultEnv],
-                                          userService: LagomIdentityService,
-                                          authInfoRepository: AuthInfoRepository,
-                                          passwordHasherRegistry: PasswordHasherRegistry,
-                                          authTokenService: AuthTokenService,
-                                          implicit val executionContext: ExecutionContext,
-                                          implicit val webJarUtil: WebJarsUtil,
-                                          implicit val webJarAssets: WJA)
-  extends AbstractController(cc) with I18nSupport {
+class ResetPasswordController @Inject()(cc: ControllerComponents,
+                                        override val messagesApi: MessagesApi,
+                                        silhouette: Silhouette[DefaultEnv],
+                                        userService: LagomIdentityService,
+                                        authInfoRepository: AuthInfoRepository,
+                                        passwordHasherRegistry: PasswordHasherRegistry,
+                                        authTokenService: AuthTokenService,
+                                        implicit val executionContext: ExecutionContext,
+                                        implicit val webJarUtil: WebJarsUtil,
+                                        implicit val webJarAssets: WJA)
+    extends AbstractController(cc)
+    with I18nSupport {
 
   /**
    * Views the `Reset Password` page.
@@ -49,7 +49,9 @@ class ResetPasswordController @Inject()(
   def view(token: UUID) = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
     authTokenService.validate(token).map {
       case Some(authToken) => Ok(io.metabookmarks.lagom.html.resetPassword(ResetPasswordForm.form, token))
-      case None => Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view()).flashing("error" -> Messages("invalid.reset.link"))
+      case None =>
+        Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+          .flashing("error" -> Messages("invalid.reset.link"))
     }
   }
 
@@ -64,16 +66,28 @@ class ResetPasswordController @Inject()(
       case Some(authToken) =>
         ResetPasswordForm.form.bindFromRequest.fold(
           form => Future.successful(BadRequest(io.metabookmarks.lagom.html.resetPassword(form, token))),
-          password => userService.retrieve(authToken.email).flatMap {
-            case Some(user)  =>
-              val passwordInfo = passwordHasherRegistry.current.hash(password)
-              authInfoRepository.update[PasswordInfo](LoginInfo(CredentialsProvider.ID, authToken.email), passwordInfo).map { _ =>
-                Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view()).flashing("success" -> Messages("password.reset"))
-              }
-            case _ => Future.successful(Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view()).flashing("error" -> Messages("invalid.reset.link")))
-          }
+          password =>
+            userService.retrieve(authToken.email).flatMap {
+              case Some(user) =>
+                val passwordInfo = passwordHasherRegistry.current.hash(password)
+                authInfoRepository
+                  .update[PasswordInfo](LoginInfo(CredentialsProvider.ID, authToken.email), passwordInfo)
+                  .map { _ =>
+                    Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+                      .flashing("success" -> Messages("password.reset"))
+                  }
+              case _ =>
+                Future.successful(
+                  Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+                    .flashing("error" -> Messages("invalid.reset.link"))
+                )
+            }
         )
-      case None => Future.successful(Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view()).flashing("error" -> Messages("invalid.reset.link")))
+      case None =>
+        Future.successful(
+          Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+            .flashing("error" -> Messages("invalid.reset.link"))
+        )
     }
   }
 }

@@ -2,9 +2,8 @@ package io.metabookmarks.user.impl
 
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec}
 
-
 class UserEntitySpec extends WordSpec with Matchers with BeforeAndAfterAll {
-/*
+  /*
 
 private val system = ActorSystem("MetabookmarksEntitySpec",
   JsonSerializerRegistry.actorSystemSetupFor(UserSerializerRegistry))
@@ -36,5 +35,5 @@ privatewithTestDriver(block: PersistentEntityTestDriver[UserCommand[_], UserEven
 
 }
 
-*/
+ */
 }

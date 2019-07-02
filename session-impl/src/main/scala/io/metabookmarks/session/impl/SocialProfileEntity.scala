@@ -20,32 +20,35 @@ class SocialProfileEntity extends PersistentEntity {
       presentBehavior
   }
 
-  private def presentBehavior = {
-    Actions().onReadOnlyCommand[GetLoginInfo, Option[SocialProfileInfo]] {
-      case (GetLoginInfo(id), ctx, state) =>
-        ctx.reply(state)
+  private def presentBehavior =
+    Actions()
+      .onReadOnlyCommand[GetLoginInfo, Option[SocialProfileInfo]] {
+        case (GetLoginInfo(id), ctx, state) =>
+          ctx.reply(state)
 
-    }.onReadOnlyCommand[GetOrCreateLoginInfo, SocialProfileInfo] {
-      case (GetOrCreateLoginInfo(userId, providerId, providerKey), ctx, state) =>
-        ctx.reply(SocialProfileInfo(userId, providerId, providerKey))
-    }
-  }
+      }
+      .onReadOnlyCommand[GetOrCreateLoginInfo, SocialProfileInfo] {
+        case (GetOrCreateLoginInfo(userId, providerId, providerKey), ctx, state) =>
+          ctx.reply(SocialProfileInfo(userId, providerId, providerKey))
+      }
 
   private val emptyBehavior: Actions =
-    Actions().onReadOnlyCommand[GetLoginInfo, Option[SocialProfileInfo]] {
-      case (GetLoginInfo(id), ctx, state) =>
-        ctx.reply(state)
+    Actions()
+      .onReadOnlyCommand[GetLoginInfo, Option[SocialProfileInfo]] {
+        case (GetLoginInfo(id), ctx, state) =>
+          ctx.reply(state)
 
-    }.onCommand[GetOrCreateLoginInfo, SocialProfileInfo] {
-      case (GetOrCreateLoginInfo(userId, providerId, providerKey), ctx, state) =>
-        ctx.thenPersist(LoginInfoCreated(userId, providerId, providerKey)) {
-          _ =>
+      }
+      .onCommand[GetOrCreateLoginInfo, SocialProfileInfo] {
+        case (GetOrCreateLoginInfo(userId, providerId, providerKey), ctx, state) =>
+          ctx.thenPersist(LoginInfoCreated(userId, providerId, providerKey)) { _ =>
             ctx.reply(SocialProfileInfo(userId, providerId, providerKey))
-        }
-    }.onEvent {
-      case (LoginInfoCreated(userId, providerId, providerKey), state) =>
-        Some(SocialProfileInfo(userId, providerId, providerKey))
-    }
+          }
+      }
+      .onEvent {
+        case (LoginInfoCreated(userId, providerId, providerKey), state) =>
+          Some(SocialProfileInfo(userId, providerId, providerKey))
+      }
 
 }
 
@@ -53,12 +56,12 @@ sealed trait LoginInfoCommand[R] extends ReplyType[R]
 
 case class GetLoginInfo(id: String) extends LoginInfoCommand[Option[SocialProfileInfo]]
 
-case class GetOrCreateLoginInfo(email: String, providerId: String, providerKey: String) extends LoginInfoCommand[SocialProfileInfo]
+case class GetOrCreateLoginInfo(email: String, providerId: String, providerKey: String)
+    extends LoginInfoCommand[SocialProfileInfo]
 
 sealed trait LoginInfoEvent
 
 case class LoginInfoCreated(email: String, providerId: String, providerKey: String) extends LoginInfoEvent
-
 
 object LoginInfoCreated {
   implicit val format: Format[LoginInfoCreated] = Json.format

@@ -3,7 +3,7 @@ package io.metabookmarks.user.impl
 import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
 
 class UserServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
-/*
+  /*
   private val server = ServiceTest.startServer(
     ServiceTest.defaultSetup
       .withCassandra(true)
@@ -33,5 +33,5 @@ class UserServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll
 //    }
   }
 
-  */
+ */
 }

@@ -10,7 +10,4 @@ import org.joda.time.DateTime
  * @param id The unique token ID.
  * @param expiry The date-time the token expires.
  */
-case class AuthToken(
-  id: UUID,
-  email: String,
-  expiry: DateTime)
+case class AuthToken(id: UUID, email: String, expiry: DateTime)

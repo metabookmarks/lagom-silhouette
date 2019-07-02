@@ -13,7 +13,7 @@ import scala.concurrent.Future
  *
  * @param messagesApi The Play messages API.
  */
-class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi) extends SecuredErrorHandler with I18nSupport {
+class CustomSecuredErrorHandler @Inject()(val messagesApi: MessagesApi) extends SecuredErrorHandler with I18nSupport {
 
   /**
    * Called when a user is not authenticated.
@@ -23,9 +23,8 @@ class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi) extends
    * @param request The request header.
    * @return The result to send to the client.
    */
-  override def onNotAuthenticated(implicit request: RequestHeader) = {
+  override def onNotAuthenticated(implicit request: RequestHeader) =
     Future.successful(Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view()))
-  }
 
   /**
    * Called when a user is authenticated but not authorized.
@@ -35,7 +34,9 @@ class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi) extends
    * @param request The request header.
    * @return The result to send to the client.
    */
-  override def onNotAuthorized(implicit request: RequestHeader) = {
-    Future.successful(Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view()).flashing("error" -> Messages("access.denied")))
-  }
+  override def onNotAuthorized(implicit request: RequestHeader) =
+    Future.successful(
+      Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+        .flashing("error" -> Messages("access.denied"))
+    )
 }

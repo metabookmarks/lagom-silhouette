@@ -9,10 +9,7 @@ import scala.concurrent.Future
 
 case class WithRole(provider: String) extends Authorization[SilhouetteUser, CookieAuthenticator] {
 
-  def isAuthorized[B](user: SilhouetteUser, authenticator: CookieAuthenticator)(
-    implicit
-    request: Request[B]) = {
-
+  def isAuthorized[B](user: SilhouetteUser, authenticator: CookieAuthenticator)(implicit
+                                                                                request: Request[B]) =
     Future.successful(true)
-  }
 }

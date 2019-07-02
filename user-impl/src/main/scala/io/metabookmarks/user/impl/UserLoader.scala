@@ -1,6 +1,5 @@
 package io.metabookmarks.user.impl
 
-
 import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
 import com.lightbend.lagom.scaladsl.client.ConfigurationServiceLocatorComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
@@ -22,7 +21,7 @@ class UserLoader extends LagomApplicationLoader {
 }
 
 abstract class UserApplication(context: LagomApplicationContext)
-  extends LagomApplication(context)
+    extends LagomApplication(context)
     with CassandraPersistenceComponents
     with LagomKafkaComponents
     with AhcWSComponents {

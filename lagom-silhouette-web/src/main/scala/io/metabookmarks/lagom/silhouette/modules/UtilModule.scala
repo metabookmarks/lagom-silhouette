@@ -5,8 +5,6 @@ import io.metabookmarks.lagom.silhouette.models.daos.AuthTokenDAOImpl
 import io.metabookmarks.lagom.silhouette.models.services.AuthTokenServiceImpl
 import play.api.{Configuration, Environment}
 
-
-
 trait UtilModule {
 
   import com.softwaremill.macwire._
@@ -17,7 +15,6 @@ trait UtilModule {
   def clock: Clock
 
   lazy val authTokenDAO = wire[AuthTokenDAOImpl]
-  lazy val authTokenService= wire[AuthTokenServiceImpl]
-
+  lazy val authTokenService = wire[AuthTokenServiceImpl]
 
 }

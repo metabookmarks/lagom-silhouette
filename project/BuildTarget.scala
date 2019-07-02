@@ -27,24 +27,26 @@ object BuildTarget {
     case Kubernetes =>
       Seq(
         Keys.libraryDependencies ++= Seq(
-          Library.serviceLocatorDns
-        ),
+            Library.serviceLocatorDns
+          ),
         Keys.unmanagedResourceDirectories in Compile += Keys.sourceDirectory.value / "main" / "kubernetes-resources"
       )
-    case Marathon   =>
+    case Marathon =>
       Seq(
         Keys.libraryDependencies ++= Seq(
-          Library.serviceLocatorDns, Library.constructr, Library.constructrZooKeeper
-        ),
+            Library.serviceLocatorDns,
+            Library.constructr,
+            Library.constructrZooKeeper
+          ),
         Keys.unmanagedResourceDirectories in Compile += Keys.sourceDirectory.value / "main" / "marathon-resources"
       )
-    case ConductR   =>
+    case ConductR =>
       Seq.empty
   }
 
   val dockerRepository: String = deploymentRuntime match {
     case Kubernetes => "silhouette"
-    case Marathon   => "silhouette-marathon"
-    case ConductR   => "silhouette-conductr"
+    case Marathon => "silhouette-marathon"
+    case ConductR => "silhouette-conductr"
   }
 }

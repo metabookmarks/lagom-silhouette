@@ -4,7 +4,6 @@ import com.mohiva.play.silhouette.api.Env
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
 import io.metabookmarks.lagom.silhouette.models.SilhouetteUser
 
-
 /**
  * The default env.
  */
