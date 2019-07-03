@@ -120,7 +120,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       "com.typesafe.play" %% "play-mailer" % "7.0.1",
       "org.webjars" %% "webjars-play" % "2.7.0",
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
-      "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4",
+      "com.adrianhurt" %% "play-bootstrap" % "1.5-P27-B3",
 
       "com.iheart" %% "ficus" % "1.4.7",
 
