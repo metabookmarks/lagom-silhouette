@@ -1,7 +1,9 @@
 package io.metabookmarks.lagom.silhouette.models.daos
 
 import com.mohiva.play.silhouette.api.{AuthInfo, LoginInfo}
+
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
+
 import io.metabookmarks.security.ClientSecurity._
 import io.metabookmarks.session.api.{SessionService, SocialProfileInfo}
 import play.api.libs.json.{Format, Json}
@@ -13,7 +15,7 @@ import scala.reflect.ClassTag
 /**
   * Created by olivier.nouguier@gmail.com on 14/10/2017.
   */
-class OAuth2InfoDAO[T <: AuthInfo : ClassTag](sessionService: SessionService, format: Format[T]) extends DelegableAuthInfoDAO[T] {
+class OAuth2InfoDAO[T <: AuthInfo : ClassTag](sessionService: SessionService, format: Format[T])(implicit val classTag: ClassTag[T]) extends DelegableAuthInfoDAO[T] {
 
   implicit def loginInfoToProfileId(loginInfo: LoginInfo): String = SocialProfileInfo.id(loginInfo.providerID, loginInfo.providerKey)
 
@@ -43,5 +45,6 @@ class OAuth2InfoDAO[T <: AuthInfo : ClassTag](sessionService: SessionService, fo
     sessionService.deleteAuthInfo(loginInfo)
     .secureInvoke()
     .map(_ => ())
+
 
 }
