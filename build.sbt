@@ -116,7 +116,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
       jdbc,
       ehcache,
       openId,
-      "net.codingwell" %% "scala-guice" % "4.2.5",
+      "net.codingwell" %% "scala-guice" % "4.2.6",
       "com.typesafe.play" %% "play-mailer" % "7.0.1",
       "org.webjars" %% "webjars-play" % "2.7.0",
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
