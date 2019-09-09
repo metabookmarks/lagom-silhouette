@@ -97,7 +97,7 @@ lazy val `user-impl` = (project in file("user-impl"))
   .dependsOn(`user-api`)
 
 
-val silhouetteVersion = "6.1.0"
+val silhouetteVersion = "6.1.1"
 
 lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
   .enablePlugins(play.sbt.routes.RoutesCompiler, SbtTwirl)
