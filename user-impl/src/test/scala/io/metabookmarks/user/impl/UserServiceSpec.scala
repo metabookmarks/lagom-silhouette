@@ -1,6 +1,8 @@
 package io.metabookmarks.user.impl
 
-import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 
 class UserServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
 /*
