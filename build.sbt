@@ -124,7 +124,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
 
       "com.iheart" %% "ficus" % "1.4.7",
 
-      "org.webjars" % "bootstrap" % "4.3.1",
+      "org.webjars" % "bootstrap" % "4.4.1",
       "org.ocpsoft.prettytime" % "prettytime" % "4.0.2.Final",
 
       "org.webjars" % "foundation" % "6.4.3",
