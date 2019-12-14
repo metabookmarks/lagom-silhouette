@@ -13,8 +13,7 @@ inThisBuild(
     crossScalaVersions := supportedScalaVersions,
     organization := "io.metabookmarks.lagom",
     bintrayOrganization := Some("metabookmarks"),
-    bintrayRepository := "lagom-silhouette",
-    organizationName := "Olivier NOUGUIER",
+    organizationName := "MetaBookMarks",
     startYear := Some(2019),
     licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
@@ -22,7 +21,7 @@ inThisBuild(
           "cheleb",
           "Olivier NOUGUIER",
           "olivier.nouguier@gmail.com",
-          url("https://github.com/cheleb")
+          url("https://github.com/OlivierNouguier")
         )
       ),
     scalafmtOnCompile := true,
@@ -42,7 +41,8 @@ inThisBuild(
 lazy val commonSettings =
   Seq(
     scalacOptions ++= crossFlags(scalaVersion.value),
-    libraryDependencies ++= crossPlugins(scalaVersion.value)
+    libraryDependencies ++= crossPlugins(scalaVersion.value),
+    bintrayRepository := "lagom-silhouette"
   )
 
 def crossFlags(scalaVersion: String) = CrossVersion.partialVersion(scalaVersion) match {
