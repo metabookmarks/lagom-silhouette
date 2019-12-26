@@ -17,7 +17,7 @@ import scala.concurrent.{ExecutionContext, Future}
  * Handles actions to users.
  *
  */
-class IdentityServiceImpl @Inject()(sessionService: SessionService, userService: UserService)(
+class IdentityServiceImpl @Inject() (sessionService: SessionService, userService: UserService)(
     implicit ec: ExecutionContext
 ) extends LagomIdentityService {
 

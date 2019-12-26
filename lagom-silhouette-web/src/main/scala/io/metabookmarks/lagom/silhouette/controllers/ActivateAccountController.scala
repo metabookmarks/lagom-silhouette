@@ -26,15 +26,15 @@ import scala.language.postfixOps
  * @param mailerClient     The mailer client.
  * @param webJarAssets     The WebJar assets locator.
  */
-class ActivateAccountController @Inject()(cc: ControllerComponents,
-                                          override val messagesApi: MessagesApi,
-                                          silhouette: Silhouette[DefaultEnv],
-                                          identityService: LagomIdentityService,
-                                          authTokenService: AuthTokenService,
-                                          mailerClient: MailerClient,
-                                          implicit val executionContext: ExecutionContext,
-                                          implicit val webJarUtil: WebJarsUtil,
-                                          implicit val webJarAssets: org.webjars.play.WebJarAssets)
+class ActivateAccountController @Inject() (cc: ControllerComponents,
+                                           override val messagesApi: MessagesApi,
+                                           silhouette: Silhouette[DefaultEnv],
+                                           identityService: LagomIdentityService,
+                                           authTokenService: AuthTokenService,
+                                           mailerClient: MailerClient,
+                                           implicit val executionContext: ExecutionContext,
+                                           implicit val webJarUtil: WebJarsUtil,
+                                           implicit val webJarAssets: org.webjars.play.WebJarAssets)
     extends AbstractController(cc)
     with I18nSupport {
 

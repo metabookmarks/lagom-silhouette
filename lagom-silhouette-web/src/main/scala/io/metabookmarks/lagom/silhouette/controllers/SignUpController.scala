@@ -31,18 +31,18 @@ import scala.concurrent.{ExecutionContext, Future}
  * @param mailerClient           The mailer client.
  * @param webJarAssets           The webjar assets implementation.
  */
-class SignUpController @Inject()(cc: ControllerComponents,
-                                 override val messagesApi: MessagesApi,
-                                 silhouette: Silhouette[DefaultEnv],
-                                 userService: LagomIdentityService,
-                                 authInfoRepository: AuthInfoRepository,
-                                 authTokenService: AuthTokenService,
-                                 avatarService: AvatarService,
-                                 passwordHasherRegistry: PasswordHasherRegistry,
-                                 mailerClient: MailerClient,
-                                 implicit val executionContext: ExecutionContext,
-                                 implicit val webJarUtil: WebJarsUtil,
-                                 implicit val webJarAssets: org.webjars.play.WebJarAssets)
+class SignUpController @Inject() (cc: ControllerComponents,
+                                  override val messagesApi: MessagesApi,
+                                  silhouette: Silhouette[DefaultEnv],
+                                  userService: LagomIdentityService,
+                                  authInfoRepository: AuthInfoRepository,
+                                  authTokenService: AuthTokenService,
+                                  avatarService: AvatarService,
+                                  passwordHasherRegistry: PasswordHasherRegistry,
+                                  mailerClient: MailerClient,
+                                  implicit val executionContext: ExecutionContext,
+                                  implicit val webJarUtil: WebJarsUtil,
+                                  implicit val webJarAssets: org.webjars.play.WebJarAssets)
     extends AbstractController(cc)
     with I18nSupport {
 

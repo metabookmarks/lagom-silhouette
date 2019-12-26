@@ -16,7 +16,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * @param service The auth token service implementation.
  * @param clock The clock implementation.
  */
-class AuthTokenCleaner @Inject()(service: AuthTokenService, clock: Clock) extends Actor with Logger {
+class AuthTokenCleaner @Inject() (service: AuthTokenService, clock: Clock) extends Actor with Logger {
 
   /**
    * Process the received messages.

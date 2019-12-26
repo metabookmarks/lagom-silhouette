@@ -28,16 +28,16 @@ import scala.concurrent.{ExecutionContext, Future}
  * @param passwordHasherRegistry The password hasher registry.
  * @param webJarAssets           The WebJar assets locator.
  */
-class ChangePasswordController @Inject()(cc: ControllerComponents,
-                                         override val messagesApi: MessagesApi,
-                                         silhouette: Silhouette[DefaultEnv],
-                                         userService: LagomIdentityService,
-                                         credentialsProvider: CredentialsProvider,
-                                         authInfoRepository: AuthInfoRepository,
-                                         passwordHasherRegistry: PasswordHasherRegistry,
-                                         implicit val executionContext: ExecutionContext,
-                                         implicit val webJarUtil: WebJarsUtil,
-                                         implicit val webJarAssets: WJA)
+class ChangePasswordController @Inject() (cc: ControllerComponents,
+                                          override val messagesApi: MessagesApi,
+                                          silhouette: Silhouette[DefaultEnv],
+                                          userService: LagomIdentityService,
+                                          credentialsProvider: CredentialsProvider,
+                                          authInfoRepository: AuthInfoRepository,
+                                          passwordHasherRegistry: PasswordHasherRegistry,
+                                          implicit val executionContext: ExecutionContext,
+                                          implicit val webJarUtil: WebJarsUtil,
+                                          implicit val webJarAssets: WJA)
     extends AbstractController(cc)
     with I18nSupport {
 

@@ -13,21 +13,19 @@ import scala.collection.immutable.Seq
 
 class SessionServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) extends SessionService {
   override def getLoginInfo(id: String) =
-    authenticated(
-      userId =>
-        ServerServiceCall { loginInfo =>
-          val ref = persistentEntityRegistry.refFor[SocialProfileEntity](id)
-          ref.ask(GetLoginInfo(id))
-        }
+    authenticated(userId =>
+      ServerServiceCall { loginInfo =>
+        val ref = persistentEntityRegistry.refFor[SocialProfileEntity](id)
+        ref.ask(GetLoginInfo(id))
+      }
     )
 
   override def getOrCreateLoginInfo =
-    authenticated(
-      loginInfo =>
-        ServerServiceCall { loginInfo =>
-          val ref = persistentEntityRegistry.refFor[SocialProfileEntity](loginInfo.id)
-          ref.ask(GetOrCreateLoginInfo(loginInfo.email, loginInfo.providerID, loginInfo.providerKey))
-        }
+    authenticated(loginInfo =>
+      ServerServiceCall { loginInfo =>
+        val ref = persistentEntityRegistry.refFor[SocialProfileEntity](loginInfo.id)
+        ref.ask(GetOrCreateLoginInfo(loginInfo.email, loginInfo.providerID, loginInfo.providerKey))
+      }
     )
 
   override def sessionsTopic(): Topic[api.SessionEvent] =
@@ -46,53 +44,48 @@ class SessionServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) ext
     }
 
   override def getAuthInfo(id: String) =
-    authenticated(
-      userId =>
-        ServerServiceCall { loginInfo =>
-          val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-          ref.ask(GetAuthInfo)
+    authenticated(userId =>
+      ServerServiceCall { loginInfo =>
+        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
+        ref.ask(GetAuthInfo)
 
-        }
+      }
     )
 
   override def addAuthInfo(id: String) =
-    authenticated(
-      userId =>
-        ServerServiceCall { payload =>
-          val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-          ref.ask(AddAuthInfo(id, payload))
+    authenticated(userId =>
+      ServerServiceCall { payload =>
+        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
+        ref.ask(AddAuthInfo(id, payload))
 
-        }
+      }
     )
 
   override def updateAuthInfo(id: String) =
-    authenticated(
-      userId =>
-        ServerServiceCall { payload =>
-          val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-          ref.ask(UpdateAuthInfo(id, payload))
+    authenticated(userId =>
+      ServerServiceCall { payload =>
+        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
+        ref.ask(UpdateAuthInfo(id, payload))
 
-        }
+      }
     )
 
   override def saveAuthInfo(id: String) =
-    authenticated(
-      userId =>
-        ServerServiceCall { payload =>
-          val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-          ref.ask(SaveAuthInfo(id, payload))
+    authenticated(userId =>
+      ServerServiceCall { payload =>
+        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
+        ref.ask(SaveAuthInfo(id, payload))
 
-        }
+      }
     )
 
   override def deleteAuthInfo(id: String) =
-    authenticated(
-      userId =>
-        ServerServiceCall { _ =>
-          val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-          ref.ask(DeleteAuthInfo(id))
+    authenticated(userId =>
+      ServerServiceCall { _ =>
+        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
+        ref.ask(DeleteAuthInfo(id))
 
-        }
+      }
     )
 }
 

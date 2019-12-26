@@ -21,20 +21,20 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 
-class SilhouetteSignInController @Inject()(cc: ControllerComponents,
-                                           override val messagesApi: MessagesApi,
-                                           silhouette: Silhouette[DefaultEnv],
-                                           userService: LagomIdentityService,
-                                           authInfoRepository: AuthInfoRepository,
-                                           credentialsProvider: CredentialsProvider,
-                                           socialProviderRegistry: SocialProviderRegistry,
-                                           configuration: Configuration,
-                                           callOnConnect: Call,
-                                           resolver: AssetResolver,
-                                           clock: Clock,
-                                           implicit val executionContext: ExecutionContext,
-                                           implicit val webJarsUtil: org.webjars.play.WebJarsUtil,
-                                           implicit val webJarAssets: org.webjars.play.WebJarAssets)
+class SilhouetteSignInController @Inject() (cc: ControllerComponents,
+                                            override val messagesApi: MessagesApi,
+                                            silhouette: Silhouette[DefaultEnv],
+                                            userService: LagomIdentityService,
+                                            authInfoRepository: AuthInfoRepository,
+                                            credentialsProvider: CredentialsProvider,
+                                            socialProviderRegistry: SocialProviderRegistry,
+                                            configuration: Configuration,
+                                            callOnConnect: Call,
+                                            resolver: AssetResolver,
+                                            clock: Clock,
+                                            implicit val executionContext: ExecutionContext,
+                                            implicit val webJarsUtil: org.webjars.play.WebJarsUtil,
+                                            implicit val webJarAssets: org.webjars.play.WebJarAssets)
     extends AbstractController(cc)
     with I18nSupport {
 

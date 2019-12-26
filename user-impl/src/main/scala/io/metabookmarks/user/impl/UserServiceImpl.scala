@@ -83,22 +83,21 @@ class UserServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implic
    */
 
   override def addProfile(providerId: String, providerKey: String) =
-    authenticated(
-      loginInfo =>
-        ServerServiceCall { user =>
-          newUser(
-            user.email,
-            AddProfile(
-              providerId,
-              Profile(providerKey = providerKey,
-                      firstName = user.firstName,
-                      lastName = user.lastName,
-                      fullName = user.fullName,
-                      avatarURL = user.avatarURL,
-                      activated = user.activated)
-            )
+    authenticated(loginInfo =>
+      ServerServiceCall { user =>
+        newUser(
+          user.email,
+          AddProfile(
+            providerId,
+            Profile(providerKey = providerKey,
+                    firstName = user.firstName,
+                    lastName = user.lastName,
+                    fullName = user.fullName,
+                    avatarURL = user.avatarURL,
+                    activated = user.activated)
           )
-        }
+        )
+      }
     )
 
 }

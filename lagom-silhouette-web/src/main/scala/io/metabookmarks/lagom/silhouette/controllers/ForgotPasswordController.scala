@@ -24,15 +24,15 @@ import scala.concurrent.{ExecutionContext, Future}
  * @param mailerClient     The mailer client.
  * @param webJarAssets     The WebJar assets locator.
  */
-class ForgotPasswordController @Inject()(cc: ControllerComponents,
-                                         override val messagesApi: MessagesApi,
-                                         silhouette: Silhouette[DefaultEnv],
-                                         userService: LagomIdentityService,
-                                         authTokenService: AuthTokenService,
-                                         mailerClient: MailerClient,
-                                         implicit val executionContext: ExecutionContext,
-                                         implicit val webJarUtil: WebJarsUtil,
-                                         implicit val webJarAssets: WJA)
+class ForgotPasswordController @Inject() (cc: ControllerComponents,
+                                          override val messagesApi: MessagesApi,
+                                          silhouette: Silhouette[DefaultEnv],
+                                          userService: LagomIdentityService,
+                                          authTokenService: AuthTokenService,
+                                          mailerClient: MailerClient,
+                                          implicit val executionContext: ExecutionContext,
+                                          implicit val webJarUtil: WebJarsUtil,
+                                          implicit val webJarAssets: WJA)
     extends AbstractController(cc)
     with I18nSupport {
 

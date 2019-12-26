@@ -24,17 +24,17 @@ import scala.concurrent.{ExecutionContext, Future}
  * @param socialProviderRegistry The social provider registry.
  * @param webJarAssets The webjar assets implementation.
  */
-class SocialAuthController @Inject()(cc: ControllerComponents,
-                                     //    actionBuilder: DefaultActionBuilder,
-                                     override val messagesApi: MessagesApi,
-                                     silhouette: Silhouette[DefaultEnv],
-                                     userService: LagomIdentityService,
-                                     onSuccesCall: Call,
-                                     authInfoRepository: AuthInfoRepository,
-                                     socialProviderRegistry: SocialProviderRegistry,
-                                     implicit val executionContext: ExecutionContext,
-                                     implicit val webJarUtil: WebJarsUtil,
-                                     implicit val webJarAssets: org.webjars.play.WebJarAssets)
+class SocialAuthController @Inject() (cc: ControllerComponents,
+                                      //    actionBuilder: DefaultActionBuilder,
+                                      override val messagesApi: MessagesApi,
+                                      silhouette: Silhouette[DefaultEnv],
+                                      userService: LagomIdentityService,
+                                      onSuccesCall: Call,
+                                      authInfoRepository: AuthInfoRepository,
+                                      socialProviderRegistry: SocialProviderRegistry,
+                                      implicit val executionContext: ExecutionContext,
+                                      implicit val webJarUtil: WebJarsUtil,
+                                      implicit val webJarAssets: org.webjars.play.WebJarAssets)
     extends AbstractController(cc)
     with I18nSupport
     with Logger {

@@ -14,14 +14,14 @@ import play.api.mvc.{AbstractController, AnyContent, Call, ControllerComponents}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SignOutController @Inject()(cc: ControllerComponents,
-                                  override val messagesApi: MessagesApi,
-                                  silhouette: Silhouette[DefaultEnv],
-                                  userService: LagomIdentityService,
-                                  onSuccess: Call,
-                                  socialProviderRegistry: SocialProviderRegistry,
-                                  implicit val webJarUtil: WebJarsUtil,
-                                  implicit val webJarAssets: WebJarAssets)
+class SignOutController @Inject() (cc: ControllerComponents,
+                                   override val messagesApi: MessagesApi,
+                                   silhouette: Silhouette[DefaultEnv],
+                                   userService: LagomIdentityService,
+                                   onSuccess: Call,
+                                   socialProviderRegistry: SocialProviderRegistry,
+                                   implicit val webJarUtil: WebJarsUtil,
+                                   implicit val webJarAssets: WebJarAssets)
     extends AbstractController(cc)
     with I18nSupport {
 

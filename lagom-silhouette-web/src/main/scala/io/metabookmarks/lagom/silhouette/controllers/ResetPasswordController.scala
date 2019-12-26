@@ -27,16 +27,16 @@ import scala.concurrent.{ExecutionContext, Future}
  * @param authTokenService       The auth token service implementation.
  * @param webJarAssets           The WebJar assets locator.
  */
-class ResetPasswordController @Inject()(cc: ControllerComponents,
-                                        override val messagesApi: MessagesApi,
-                                        silhouette: Silhouette[DefaultEnv],
-                                        userService: LagomIdentityService,
-                                        authInfoRepository: AuthInfoRepository,
-                                        passwordHasherRegistry: PasswordHasherRegistry,
-                                        authTokenService: AuthTokenService,
-                                        implicit val executionContext: ExecutionContext,
-                                        implicit val webJarUtil: WebJarsUtil,
-                                        implicit val webJarAssets: WJA)
+class ResetPasswordController @Inject() (cc: ControllerComponents,
+                                         override val messagesApi: MessagesApi,
+                                         silhouette: Silhouette[DefaultEnv],
+                                         userService: LagomIdentityService,
+                                         authInfoRepository: AuthInfoRepository,
+                                         passwordHasherRegistry: PasswordHasherRegistry,
+                                         authTokenService: AuthTokenService,
+                                         implicit val executionContext: ExecutionContext,
+                                         implicit val webJarUtil: WebJarsUtil,
+                                         implicit val webJarAssets: WJA)
     extends AbstractController(cc)
     with I18nSupport {
 

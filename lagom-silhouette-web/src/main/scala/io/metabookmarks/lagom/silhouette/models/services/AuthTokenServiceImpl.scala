@@ -19,7 +19,7 @@ import scala.language.postfixOps
  * @param authTokenDAO The auth token DAO implementation.
  * @param clock The clock instance.
  */
-class AuthTokenServiceImpl @Inject()(authTokenDAO: AuthTokenDAO, clock: Clock) extends AuthTokenService {
+class AuthTokenServiceImpl @Inject() (authTokenDAO: AuthTokenDAO, clock: Clock) extends AuthTokenService {
 
   /**
    * Creates a new auth token and saves it in the backing store.
