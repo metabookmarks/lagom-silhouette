@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import play.api.libs.json.{Format, Json}
 
 import scala.collection.immutable.Seq
+import io.metabookmarks.lagom.domain.Event
 
 /**
  * This is an event sourced entity. It has a state, Map[String, Profile], which
@@ -116,17 +117,10 @@ object UserEvent {
 /**
  * An event that represents an user change.
  */
+@Event
 case class ProfileAdded(email: String, providerId: String, profile: Profile) extends UserEvent
-
-object ProfileAdded {
-  implicit val format: Format[ProfileAdded] = Json.format
-}
-
+@Event
 case class ProfileUpdated(email: String, providerId: String, profile: Profile) extends UserEvent
-
-object ProfileUpdated {
-  implicit val format: Format[ProfileUpdated] = Json.format
-}
 
 /**
  * This interface defines all the commands that the HelloWorld entity supports.
@@ -143,21 +137,8 @@ case class GetUser(provider: Option[String] = None) extends UserCommand[api.User
  * It has a reply type of api.User, which is sent back to the caller
  * when all the events emitted by this command are successfully persisted.
  */
+@Event
 case class UpdateProfile(providerId: String, profile: Profile) extends UserCommand[api.User]
-
-object UpdateProfile {
-
-  /**
-   * Format for the use greeting message command.
-   *
-   * Persistent entities get sharded across the cluster. This means commands
-   * may be sent over the network to the node where the entity lives if the
-   * entity is not on the same node that the command was issued from. To do
-   * that, a JSON format needs to be declared so the command can be serialized
-   * and deserialized.
-   */
-  implicit val format: Format[UpdateProfile] = Json.format
-}
 
 /**
  * Akka serialization, used by both persistence and remoting, needs to have

@@ -10,21 +10,31 @@ import io.metabookmarks.session.api
 import io.metabookmarks.session.api.SessionService
 
 import scala.collection.immutable.Seq
+import akka.compat.Future
+import scala.concurrent.Future
+import com.lightbend.lagom.scaladsl.persistence.PersistentEntity
+import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRef
 
 class SessionServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) extends SessionService {
+
+  private def socialProfileEntity(id: String) =
+    persistentEntityRegistry.refFor[SocialProfileEntity](id)
+
+  private def authInfoEntity(id: String) =
+    persistentEntityRegistry.refFor[AuthInfoEntity](id)
+
   override def getLoginInfo(id: String) =
     authenticated(userId =>
       ServerServiceCall { loginInfo =>
-        val ref = persistentEntityRegistry.refFor[SocialProfileEntity](id)
-        ref.ask(GetLoginInfo(id))
+        socialProfileEntity(id).ask(GetLoginInfo(id))
       }
     )
 
   override def getOrCreateLoginInfo =
     authenticated(loginInfo =>
       ServerServiceCall { loginInfo =>
-        val ref = persistentEntityRegistry.refFor[SocialProfileEntity](loginInfo.id)
-        ref.ask(GetOrCreateLoginInfo(loginInfo.email, loginInfo.providerID, loginInfo.providerKey))
+        socialProfileEntity(loginInfo.id)
+          .ask(GetOrCreateLoginInfo(loginInfo.email, loginInfo.providerId, loginInfo.providerKey))
       }
     )
 
@@ -39,52 +49,47 @@ class SessionServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) ext
     ev.event match {
       case AuthInfoUpdated(id, payload) =>
         api.AuthInfoCreated(id)
-      case AuthInfoDeleted(id) => api.AuthInfoDeleted(id)
-
+      case AuthInfoDeleted(id) =>
+        api.AuthInfoDeleted(id)
     }
 
   override def getAuthInfo(id: String) =
     authenticated(userId =>
       ServerServiceCall { loginInfo =>
-        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-        ref.ask(GetAuthInfo)
-
+        authInfoEntity(id)
+          .ask(GetAuthInfo)
       }
     )
 
   override def addAuthInfo(id: String) =
     authenticated(userId =>
       ServerServiceCall { payload =>
-        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-        ref.ask(AddAuthInfo(id, payload))
-
+        authInfoEntity(id)
+          .ask(AddAuthInfo(id, payload))
       }
     )
 
   override def updateAuthInfo(id: String) =
     authenticated(userId =>
       ServerServiceCall { payload =>
-        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-        ref.ask(UpdateAuthInfo(id, payload))
-
+        authInfoEntity(id)
+          .ask(UpdateAuthInfo(id, payload))
       }
     )
 
   override def saveAuthInfo(id: String) =
     authenticated(userId =>
       ServerServiceCall { payload =>
-        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-        ref.ask(SaveAuthInfo(id, payload))
-
+        authInfoEntity(id)
+          .ask(SaveAuthInfo(id, payload))
       }
     )
 
   override def deleteAuthInfo(id: String) =
     authenticated(userId =>
       ServerServiceCall { _ =>
-        val ref = persistentEntityRegistry.refFor[AuthInfoEntity](id)
-        ref.ask(DeleteAuthInfo(id))
-
+        authInfoEntity(id)
+          .ask(DeleteAuthInfo(id))
       }
     )
 }

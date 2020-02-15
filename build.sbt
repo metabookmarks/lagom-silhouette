@@ -78,6 +78,7 @@ val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.1.0" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "2.1.0")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
+val chimney = "io.scalaland" %% "chimney" % "0.4.1"
 
 lazy val `lagom-silhouette` = (project in file("."))
   .settings(publish := {})
@@ -113,6 +114,7 @@ lazy val `session-impl` = (project in file("session-impl"))
         lagomScaladslKafkaBroker,
         lagomScaladslTestKit,
         macwire,
+        chimney,
         scalaTest
       )
   )

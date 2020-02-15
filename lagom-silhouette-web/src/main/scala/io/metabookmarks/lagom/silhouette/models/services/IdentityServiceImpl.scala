@@ -91,7 +91,7 @@ class IdentityServiceImpl @Inject() (sessionService: SessionService, userService
       fromLoginInfo(profile.loginInfo) {
         case Some(loginInfo) =>
           userService
-            .updateProfile(loginInfo.email, loginInfo.providerID)
+            .updateProfile(loginInfo.email, loginInfo.providerId)
             .secureInvoke(
               Profile(
                 providerKey = loginInfo.providerKey,

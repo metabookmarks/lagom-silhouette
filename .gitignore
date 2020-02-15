@@ -10,3 +10,4 @@ target/
 .cache-tests
 .bloop/
 .metals/
+metals.sbt

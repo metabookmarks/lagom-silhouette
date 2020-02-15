@@ -5,6 +5,9 @@ import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import io.metabookmarks.session.api.SocialProfileInfo
 import play.api.libs.json.{Format, Json}
 
+import io.scalaland.chimney.dsl._
+import io.metabookmarks.lagom.domain.Event
+
 class SocialProfileEntity extends PersistentEntity {
 
   override type Command = LoginInfoCommand[_]
@@ -28,8 +31,8 @@ class SocialProfileEntity extends PersistentEntity {
 
       }
       .onReadOnlyCommand[GetOrCreateLoginInfo, SocialProfileInfo] {
-        case (GetOrCreateLoginInfo(userId, providerId, providerKey), ctx, state) =>
-          ctx.reply(SocialProfileInfo(userId, providerId, providerKey))
+        case (loginInfo: GetOrCreateLoginInfo, ctx, state) =>
+          ctx.reply(loginInfo.into[SocialProfileInfo].transform)
       }
 
   private val emptyBehavior: Actions =
@@ -40,14 +43,14 @@ class SocialProfileEntity extends PersistentEntity {
 
       }
       .onCommand[GetOrCreateLoginInfo, SocialProfileInfo] {
-        case (GetOrCreateLoginInfo(userId, providerId, providerKey), ctx, state) =>
-          ctx.thenPersist(LoginInfoCreated(userId, providerId, providerKey)) { _ =>
-            ctx.reply(SocialProfileInfo(userId, providerId, providerKey))
+        case (loginInfo: GetOrCreateLoginInfo, ctx, state) =>
+          ctx.thenPersist(loginInfo.into[LoginInfoCreated] transform) { _ =>
+            ctx.reply(loginInfo.into[SocialProfileInfo].transform)
           }
       }
       .onEvent {
-        case (LoginInfoCreated(userId, providerId, providerKey), state) =>
-          Some(SocialProfileInfo(userId, providerId, providerKey))
+        case (loginInfo: LoginInfoCreated, state) =>
+          Some(loginInfo.into[SocialProfileInfo].transform)
       }
 
 }
@@ -61,8 +64,5 @@ case class GetOrCreateLoginInfo(email: String, providerId: String, providerKey: 
 
 sealed trait LoginInfoEvent
 
+@Event
 case class LoginInfoCreated(email: String, providerId: String, providerKey: String) extends LoginInfoEvent
-
-object LoginInfoCreated {
-  implicit val format: Format[LoginInfoCreated] = Json.format
-}
