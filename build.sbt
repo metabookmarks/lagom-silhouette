@@ -76,7 +76,7 @@ val monocle = Seq(
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "7.0.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % Test
-val cats = Seq("org.typelevel" %% "cats-core" % "2.1.0")
+val cats = Seq("org.typelevel" %% "cats-core" % "2.1.1")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
 val chimney = "io.scalaland" %% "chimney" % "0.4.1"
 
@@ -148,7 +148,7 @@ lazy val `user-impl` = (project in file("user-impl"))
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`user-api`)
 
-val silhouetteVersion = "6.1.1"
+val silhouetteVersion = "7.0.0"
 
 lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
   .enablePlugins(play.sbt.routes.RoutesCompiler, SbtTwirl)
@@ -168,13 +168,13 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
         ehcache,
         openId,
         "net.codingwell" %% "scala-guice" % "4.2.6",
-        "com.typesafe.play" %% "play-mailer" % "7.0.1",
+        "com.typesafe.play" %% "play-mailer" % "8.0.0",
         "org.webjars" %% "webjars-play" % "2.8.0",
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
         "com.adrianhurt" %% "play-bootstrap" % "1.5.1-P27-B4",
         "com.iheart" %% "ficus" % "1.4.7",
         "org.webjars" % "bootstrap" % "4.4.1",
-        "org.ocpsoft.prettytime" % "prettytime" % "4.0.3.Final",
+        "org.ocpsoft.prettytime" % "prettytime" % "4.0.4.Final",
         "org.webjars" % "foundation" % "6.4.3",
         "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3"
       ),
