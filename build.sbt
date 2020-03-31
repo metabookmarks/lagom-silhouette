@@ -78,7 +78,7 @@ val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "2.1.1")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
-val chimney = "io.scalaland" %% "chimney" % "0.4.2"
+val chimney = "io.scalaland" %% "chimney" % "0.5.0"
 
 lazy val `lagom-silhouette` = (project in file("."))
   .settings(publish := {})
@@ -173,9 +173,9 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
         "com.adrianhurt" %% "play-bootstrap" % "1.5.1-P27-B4",
         "com.iheart" %% "ficus" % "1.4.7",
-        "org.webjars" % "bootstrap" % "4.4.1",
+        "org.webjars" % "bootstrap" % "4.4.1-1",
         "org.ocpsoft.prettytime" % "prettytime" % "4.0.4.Final",
-        "org.webjars" % "foundation" % "6.4.3",
+        "org.webjars" % "foundation" % "6.4.3-1",
         "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3"
       ),
     //   EclipseKeys.preTasks := Seq(compile in Compile),
