@@ -42,7 +42,7 @@ lazy val commonSettings =
   Seq(
     scalacOptions ++= crossFlags(scalaVersion.value),
     libraryDependencies ++= crossPlugins(scalaVersion.value),
-    bintrayRepository := "lagom-silhouette"
+    bintrayRepository := "releases"
   )
 
 def crossFlags(scalaVersion: String) = CrossVersion.partialVersion(scalaVersion) match {
