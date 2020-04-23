@@ -3,7 +3,7 @@ resolvers += Resolver.bintrayIvyRepo("metabookmarks", "sbt-plugin-releases")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.4")
 
 // The Lagom plugin
-addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.6.1")
+addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.6.2")
 
 addSbtPlugin("com.lightbend.rp" % "sbt-reactive-app" % "1.7.3")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13")
