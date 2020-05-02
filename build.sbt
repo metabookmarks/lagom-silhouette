@@ -4,6 +4,7 @@ lazy val scala212 = "2.12.10"
 lazy val scala213 = "2.13.1"
 
 lazy val supportedScalaVersions = List(scala213, scala212)
+val circeVersion = "0.13.0"
 
 inThisBuild(
   List(
@@ -79,6 +80,10 @@ val scalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "2.1.1")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
 val chimney = "io.scalaland" %% "chimney" % "0.5.1"
+
+val playCirce =  Seq("com.dripower" %% "play-circe" % "2812.0",
+      "io.circe" %% "circe-parser" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion)
 
 lazy val `lagom-silhouette` = (project in file("."))
   .settings(publish := {})
@@ -156,7 +161,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
   .settings(commonSettings)
   .settings(
     resolvers += "Atlasian" at "https://maven.atlassian.com/content/repositories/atlassian-public",
-    libraryDependencies ++= cats ++ Seq(
+    libraryDependencies ++= cats ++ playCirce ++ Seq(
         lagomScaladslServer,
         macwire,
         scalaTest,
@@ -171,7 +176,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
         "com.typesafe.play" %% "play-mailer" % "8.0.0",
         "org.webjars" %% "webjars-play" % "2.8.0",
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
-        "com.adrianhurt" %% "play-bootstrap" % "1.5.1-P27-B4",
+        "com.adrianhurt" %% "play-bootstrap" % "1.5.1-P27-B4",        
         "com.iheart" %% "ficus" % "1.4.7",
         "org.webjars" % "bootstrap" % "4.4.1-1",
         "org.ocpsoft.prettytime" % "prettytime" % "4.0.5.Final",

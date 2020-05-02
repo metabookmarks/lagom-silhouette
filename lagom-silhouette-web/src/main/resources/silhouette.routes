@@ -2,11 +2,14 @@ GET         /signUp                          io.metabookmarks.lagom.silhouette.c
 POST        /signUp                          io.metabookmarks.lagom.silhouette.controllers.SignUpController.submit
 
 
-GET         /signIn                         io.metabookmarks.lagom.silhouette.controllers.SilhouetteSignInController.view
-POST        /signIn                         io.metabookmarks.lagom.silhouette.controllers.SilhouetteSignInController.submit
+GET         /signIn                          io.metabookmarks.lagom.silhouette.controllers.SilhouetteSignInController.view
+POST        /signIn                          io.metabookmarks.lagom.silhouette.controllers.SilhouetteSignInController.submit
 
 GET         /account/email/:email            io.metabookmarks.lagom.silhouette.controllers.ActivateAccountController.send(email: String)
 GET         /account/activate/:token         io.metabookmarks.lagom.silhouette.controllers.ActivateAccountController.activate(token: java.util.UUID)
+
+
+GET         /profile                         io.metabookmarks.lagom.silhouette.controllers.ProfileController.profile
 
 GET         /password/forgot                 io.metabookmarks.lagom.silhouette.controllers.ForgotPasswordController.view
 POST        /password/forgot                 io.metabookmarks.lagom.silhouette.controllers.ForgotPasswordController.submit

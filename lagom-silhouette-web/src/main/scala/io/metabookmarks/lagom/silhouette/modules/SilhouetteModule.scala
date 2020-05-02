@@ -332,6 +332,7 @@ trait SilhouetteModule
   lazy val lagomResetPasswordController = wire[ResetPasswordController]
   lazy val lagomSocialAuthController = wire[SocialAuthController]
   lazy val lagomSignOutController = wire[SignOutController]
+  lazy val lagomProfileController = wire[ProfileController]
 
   /**
    * A very nested optional reader, to support these cases:
