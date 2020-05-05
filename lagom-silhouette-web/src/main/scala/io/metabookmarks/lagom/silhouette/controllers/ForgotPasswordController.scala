@@ -32,8 +32,8 @@ class ForgotPasswordController @Inject() (cc: ControllerComponents,
                                           mailerClient: MailerClient,
                                           implicit val executionContext: ExecutionContext,
                                           implicit val webJarUtil: WebJarsUtil,
-                                          implicit val webJarAssets: WJA)
-    extends AbstractController(cc)
+                                          implicit val webJarAssets: WJA
+) extends AbstractController(cc)
     with I18nSupport {
 
   /**
@@ -41,9 +41,10 @@ class ForgotPasswordController @Inject() (cc: ControllerComponents,
    *
    * @return The result to display.
    */
-  def view = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    Future.successful(Ok(io.metabookmarks.lagom.html.forgotPassword(ForgotPasswordForm.form)))
-  }
+  def view =
+    silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+      Future.successful(Ok(io.metabookmarks.lagom.html.forgotPassword(ForgotPasswordForm.form)))
+    }
 
   /**
    * Sends an email with password reset instructions.
@@ -53,35 +54,36 @@ class ForgotPasswordController @Inject() (cc: ControllerComponents,
    *
    * @return The result to display.
    */
-  def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    ForgotPasswordForm.form.bindFromRequest.fold(
-      form => Future.successful(BadRequest(io.metabookmarks.lagom.html.forgotPassword(form))),
-      email => {
-        val loginInfo = LoginInfo(CredentialsProvider.ID, email)
-        val result = Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
-          .flashing("info" -> Messages("reset.email.sent"))
-        userService.retrieve(loginInfo).flatMap {
-          case Some(user) =>
-            authTokenService.create(email).map {
-              authToken =>
-                val url = io.metabookmarks.lagom.silhouette.controllers.routes.ResetPasswordController
-                  .view(authToken.id)
-                  .absoluteURL()
+  def submit =
+    silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+      ForgotPasswordForm.form.bindFromRequest.fold(
+        form => Future.successful(BadRequest(io.metabookmarks.lagom.html.forgotPassword(form))),
+        email => {
+          val loginInfo = LoginInfo(CredentialsProvider.ID, email)
+          val result = Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+            .flashing("info" -> Messages("reset.email.sent"))
+          userService.retrieve(loginInfo).flatMap {
+            case Some(user) =>
+              authTokenService.create(email).map {
+                authToken =>
+                  val url = io.metabookmarks.lagom.silhouette.controllers.routes.ResetPasswordController
+                    .view(authToken.id)
+                    .absoluteURL()
 
-                mailerClient.send(
-                  Email(
-                    subject = Messages("email.reset.password.subject"),
-                    from = Messages("email.from"),
-                    to = Seq(email),
-                    bodyText = Some(io.metabookmarks.lagom.email.txt.resetPassword(user, url).body),
-                    bodyHtml = Some(io.metabookmarks.lagom.email.html.resetPassword(user, url).body)
+                  mailerClient.send(
+                    Email(
+                      subject = Messages("email.reset.password.subject"),
+                      from = Messages("email.from"),
+                      to = Seq(email),
+                      bodyText = Some(io.metabookmarks.lagom.email.txt.resetPassword(user, url).body),
+                      bodyHtml = Some(io.metabookmarks.lagom.email.html.resetPassword(user, url).body)
+                    )
                   )
-                )
-                result
-            }
-          case None => Future.successful(result)
+                  result
+              }
+            case None => Future.successful(result)
+          }
         }
-      }
-    )
-  }
+      )
+    }
 }

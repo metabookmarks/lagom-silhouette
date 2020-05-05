@@ -15,8 +15,8 @@ import scala.reflect.ClassTag
 /**
  * Created by olivier.nouguier@gmail.com on 14/10/2017.
  */
-class OAuth2InfoDAO[T <: AuthInfo: ClassTag](sessionService: SessionService, format: Format[T])(
-    implicit val classTag: ClassTag[T]
+class OAuth2InfoDAO[T <: AuthInfo: ClassTag](sessionService: SessionService, format: Format[T])(implicit
+    val classTag: ClassTag[T]
 ) extends DelegableAuthInfoDAO[T] {
 
   implicit def loginInfoToProfileId(loginInfo: LoginInfo): String =

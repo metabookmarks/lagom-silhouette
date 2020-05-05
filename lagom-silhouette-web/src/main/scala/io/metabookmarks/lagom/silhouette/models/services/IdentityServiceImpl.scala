@@ -17,8 +17,8 @@ import scala.concurrent.{ExecutionContext, Future}
  * Handles actions to users.
  *
  */
-class IdentityServiceImpl @Inject() (sessionService: SessionService, userService: UserService)(
-    implicit ec: ExecutionContext
+class IdentityServiceImpl @Inject() (sessionService: SessionService, userService: UserService)(implicit
+    ec: ExecutionContext
 ) extends LagomIdentityService {
 
   /**
@@ -27,9 +27,10 @@ class IdentityServiceImpl @Inject() (sessionService: SessionService, userService
    * @param email The ID to retrieve a user.
    * @return The retrieved user or None if no user could be retrieved for the given ID.
    */
-  def retrieve(email: String): Future[Option[SilhouetteUser]] = userService.getUser(email).secureInvoke().map { user =>
-    Some(convert(user))
-  }
+  def retrieve(email: String): Future[Option[SilhouetteUser]] =
+    userService.getUser(email).secureInvoke().map { user =>
+      Some(convert(user))
+    }
 
   /**
    * Retrieves a user that matches the specified login info.
@@ -37,13 +38,14 @@ class IdentityServiceImpl @Inject() (sessionService: SessionService, userService
    * @param loginInfo The login info to retrieve a user.
    * @return The retrieved user or None if no user could be retrieved for the given login info.
    */
-  def retrieve(loginInfo: LoginInfo): Future[Option[SilhouetteUser]] = fromLoginInfo(loginInfo) {
-    case None => Future.successful(None)
-    case Some(loginInfoApi) =>
-      userService.getUser(loginInfoApi.email).secureInvoke().map { user =>
-        Some(convert(user))
-      }
-  }
+  def retrieve(loginInfo: LoginInfo): Future[Option[SilhouetteUser]] =
+    fromLoginInfo(loginInfo) {
+      case None => Future.successful(None)
+      case Some(loginInfoApi) =>
+        userService.getUser(loginInfoApi.email).secureInvoke().map { user =>
+          Some(convert(user))
+        }
+    }
 
   /**
    * Saves a user.
@@ -52,9 +54,9 @@ class IdentityServiceImpl @Inject() (sessionService: SessionService, userService
    * @return The saved user.
    */
   def save(silhouetteUser: SilhouetteUser, loginInfo: LoginInfo): Future[SilhouetteUser] =
-    if (silhouetteUser.email.isEmpty) {
+    if (silhouetteUser.email.isEmpty)
       Future.failed(new Exception("No email"))
-    } else {
+    else {
 
       val info = MTBLoginInfo(silhouetteUser.email, loginInfo.providerID, loginInfo.providerKey)
 
@@ -69,9 +71,10 @@ class IdentityServiceImpl @Inject() (sessionService: SessionService, userService
 
       for {
         _ <- sessionService.getOrCreateLoginInfo.secureInvoke(info)
-        user <- userService
-          .insertUser(loginInfo.providerID, loginInfo.providerKey, silhouetteUser.email)
-          .secureInvoke(userToCreate)
+        user <-
+          userService
+            .insertUser(loginInfo.providerID, loginInfo.providerKey, silhouetteUser.email)
+            .secureInvoke(userToCreate)
       } yield convert(user)
     }
 
@@ -105,20 +108,22 @@ class IdentityServiceImpl @Inject() (sessionService: SessionService, userService
             .map(u => convert(u))
         case None =>
           for {
-            user <- userService
-              .addProfile(profile.loginInfo.providerID, profile.loginInfo.providerKey)
-              .secureInvoke(
-                UserToCreate(
-                  email = email,
-                  firstName = profile.firstName,
-                  lastName = profile.lastName,
-                  fullName = profile.fullName,
-                  avatarURL = profile.avatarURL,
-                  activated = true
+            user <-
+              userService
+                .addProfile(profile.loginInfo.providerID, profile.loginInfo.providerKey)
+                .secureInvoke(
+                  UserToCreate(
+                    email = email,
+                    firstName = profile.firstName,
+                    lastName = profile.lastName,
+                    fullName = profile.fullName,
+                    avatarURL = profile.avatarURL,
+                    activated = true
+                  )
                 )
-              )
-            loginIn <- sessionService.getOrCreateLoginInfo
-              .secureInvoke(MTBLoginInfo(user.email, profile.loginInfo.providerID, profile.loginInfo.providerKey))
+            loginIn <-
+              sessionService.getOrCreateLoginInfo
+                .secureInvoke(MTBLoginInfo(user.email, profile.loginInfo.providerID, profile.loginInfo.providerKey))
           } yield convert(user)
 
       }

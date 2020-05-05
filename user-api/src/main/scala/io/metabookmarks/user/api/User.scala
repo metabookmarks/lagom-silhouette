@@ -17,7 +17,8 @@ case class User(email: String,
                 fullName: Option[String] = None,
                 avatarURL: Option[String] = None,
                 activated: Boolean = true,
-                profiles: Map[String, Profile] = Map.empty)
+                profiles: Map[String, Profile] = Map.empty
+)
 
 object Profile {
   implicit val format = Json.format[Profile]

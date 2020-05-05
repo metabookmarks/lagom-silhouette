@@ -29,12 +29,13 @@ case class SilhouetteUser(
    *
    * @return Maybe a name.
    */
-  def name = fullName.orElse {
-    firstName -> lastName match {
-      case (Some(f), Some(l)) => Some(f + " " + l)
-      case (Some(f), None) => Some(f)
-      case (None, Some(l)) => Some(l)
-      case _ => None
+  def name =
+    fullName.orElse {
+      firstName -> lastName match {
+        case (Some(f), Some(l)) => Some(f + " " + l)
+        case (Some(f), None) => Some(f)
+        case (None, Some(l)) => Some(l)
+        case _ => None
+      }
     }
-  }
 }

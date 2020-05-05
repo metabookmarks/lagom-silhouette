@@ -21,8 +21,8 @@ class SignOutController @Inject() (cc: ControllerComponents,
                                    onSuccess: Call,
                                    socialProviderRegistry: SocialProviderRegistry,
                                    implicit val webJarUtil: WebJarsUtil,
-                                   implicit val webJarAssets: WebJarAssets)
-    extends AbstractController(cc)
+                                   implicit val webJarAssets: WebJarAssets
+) extends AbstractController(cc)
     with I18nSupport {
 
   /**
@@ -30,18 +30,19 @@ class SignOutController @Inject() (cc: ControllerComponents,
    *
    * @return The result to display.
    */
-  def signOut = silhouette.UserAwareAction.async { implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
-    request.identity
-      .map { user =>
-        userService.retrieve(user.email).flatMap { uo =>
-          val result = Redirect(onSuccess)
-          silhouette.env.eventBus.publish(LogoutEvent(uo.get, request))
-          silhouette.env.authenticatorService.discard(request.authenticator.get, result)
+  def signOut =
+    silhouette.UserAwareAction.async { implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
+      request.identity
+        .map { user =>
+          userService.retrieve(user.email).flatMap { uo =>
+            val result = Redirect(onSuccess)
+            silhouette.env.eventBus.publish(LogoutEvent(uo.get, request))
+            silhouette.env.authenticatorService.discard(request.authenticator.get, result)
+
+          }
 
         }
+        .getOrElse(Future.successful(Redirect(onSuccess)))
 
-      }
-      .getOrElse(Future.successful(Redirect(onSuccess)))
-
-  }
+    }
 }

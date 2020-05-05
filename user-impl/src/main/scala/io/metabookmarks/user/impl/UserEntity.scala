@@ -98,7 +98,8 @@ class UserEntity extends PersistentEntity {
              lastName = profile.lastName,
              firstName = profile.firstName,
              avatarURL = profile.avatarURL,
-             profiles = profiles + (providerId -> profile))
+             profiles = profiles + (providerId -> profile)
+    )
 }
 
 case class User(email: String, profiles: Map[String, Profile] = Map.empty)
@@ -150,10 +151,11 @@ case class UpdateProfile(providerId: String, profile: Profile) extends UserComma
  * application loader.
  */
 object UserSerializerRegistry extends JsonSerializerRegistry {
-  override def serializers: Seq[JsonSerializer[_]] = Seq(
-    JsonSerializer[UpdateProfile],
-    JsonSerializer[ProfileUpdated],
-    JsonSerializer[ProfileAdded],
-    JsonSerializer[api.User]
-  )
+  override def serializers: Seq[JsonSerializer[_]] =
+    Seq(
+      JsonSerializer[UpdateProfile],
+      JsonSerializer[ProfileUpdated],
+      JsonSerializer[ProfileAdded],
+      JsonSerializer[api.User]
+    )
 }

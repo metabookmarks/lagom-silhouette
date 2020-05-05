@@ -14,9 +14,8 @@ object Binders {
    */
   implicit object UUIDPathBindable extends PathBindable[UUID] {
     def bind(key: String, value: String) =
-      try {
-        Right(UUID.fromString(value))
-      } catch {
+      try Right(UUID.fromString(value))
+      catch {
         case e: Exception => Left("Cannot parse parameter '" + key + "' with value '" + value + "' as UUID")
       }
 

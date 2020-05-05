@@ -63,15 +63,17 @@ trait UserService extends Service {
 
   import play.api.libs.json._
 
-  implicit def optionReads[T: Format]: Reads[Option[T]] = Reads {
-    case JsNull => JsSuccess(None)
-    case other => other.validate[T].map(Some.apply)
-  }
+  implicit def optionReads[T: Format]: Reads[Option[T]] =
+    Reads {
+      case JsNull => JsSuccess(None)
+      case other => other.validate[T].map(Some.apply)
+    }
 
-  implicit def optionWrites[T: Format]: Writes[Option[T]] = Writes {
-    case None => JsNull
-    case Some(t) => Json.toJson(t)
-  }
+  implicit def optionWrites[T: Format]: Writes[Option[T]] =
+    Writes {
+      case None => JsNull
+      case Some(t) => Json.toJson(t)
+    }
 }
 
 @Event
@@ -80,7 +82,8 @@ case class UserToCreate(email: String,
                         firstName: Option[String],
                         lastName: Option[String],
                         avatarURL: Option[String],
-                        activated: Boolean)
+                        activated: Boolean
+)
 @Event
 sealed trait UserEvent {
   def email: String
@@ -92,5 +95,5 @@ case class UserUpdated(email: String,
                        firstName: Option[String],
                        lastName: Option[String],
                        avatarURL: Option[String],
-                       activated: Boolean)
-    extends UserEvent
+                       activated: Boolean
+) extends UserEvent

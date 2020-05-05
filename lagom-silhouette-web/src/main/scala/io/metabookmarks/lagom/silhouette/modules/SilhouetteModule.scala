@@ -166,7 +166,8 @@ trait SilhouetteModule
                                      encoder,
                                      fingerprintGenerator,
                                      idGenerator,
-                                     clock)
+                                     clock
+      )
     }
   }
 
@@ -183,7 +184,8 @@ trait SilhouetteModule
     def apply(clock: Clock,
               configuration: Configuration,
               signer: Signer,
-              crypter: Crypter): OAuth1TokenSecretProvider = {
+              crypter: Crypter
+    ): OAuth1TokenSecretProvider = {
       val settings = configuration.underlying.as[CookieSecretSettings]("silhouette.oauth1TokenSecretProvider")
       new CookieSecretProvider(settings, signer, crypter, clock)
     }
@@ -197,7 +199,8 @@ trait SilhouetteModule
     def apply(idGenerator: IDGenerator,
               signer: Signer,
               configuration: Configuration,
-              clock: Clock): SocialStateHandler =
+              clock: Clock
+    ): SocialStateHandler =
       new DefaultSocialStateHandler(Set(new UserStateItemHandler[UserStateItem](new UserStateItem(Map()))), signer)
   }
 
@@ -344,14 +347,12 @@ trait SilhouetteModule
   // ValueReader.relative(cfg => Cookie.SameSite.parse(cfg.as[String]))
   implicit val sameSiteReader: ValueReader[Option[Option[Cookie.SameSite]]] =
     (config: Config, path: String) => {
-      if (config.hasPathOrNull(path)) {
+      if (config.hasPathOrNull(path))
         if (config.getIsNull(path))
           Some(None)
-        else {
+        else
           Some(Cookie.SameSite.parse(config.getString(path)))
-        }
-      } else {
+      else
         None
-      }
     }
 }

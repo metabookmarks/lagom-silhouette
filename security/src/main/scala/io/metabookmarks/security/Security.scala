@@ -34,12 +34,13 @@ object UserPrincipal {
     override def serviceName: String = servicePrincipal.serviceName
   }
 
-  def of(userProfile: String, principal: Option[Principal]) = principal match {
-    case Some(servicePrincipal: ServicePrincipal) =>
-      UserPrincipal.UserServicePrincipal(userProfile, servicePrincipal)
-    case _ =>
-      UserPrincipal.ServicelessUserPrincipal(userProfile)
-  }
+  def of(userProfile: String, principal: Option[Principal]) =
+    principal match {
+      case Some(servicePrincipal: ServicePrincipal) =>
+        UserPrincipal.UserServicePrincipal(userProfile, servicePrincipal)
+      case _ =>
+        UserPrincipal.ServicelessUserPrincipal(userProfile)
+    }
 
 }
 
@@ -96,16 +97,18 @@ sealed trait Crypter {
 }
 
 object SecurityHeaderFilter extends HeaderFilter with Crypter {
-  override def transformClientRequest(request: RequestHeader) = request.principal match {
-    case Some(userPrincipal: UserPrincipal) => request.withHeader("User-Id", encrypt(userPrincipal.userId))
-    case _ => request
-  }
+  override def transformClientRequest(request: RequestHeader) =
+    request.principal match {
+      case Some(userPrincipal: UserPrincipal) => request.withHeader("User-Id", encrypt(userPrincipal.userId))
+      case _ => request
+    }
 
-  override def transformServerRequest(request: RequestHeader) = request.getHeader("User-Id").flatMap(decrypt) match {
-    case Some(userId) =>
-      request.withPrincipal(UserPrincipal.of(userId, request.principal))
-    case None => request
-  }
+  override def transformServerRequest(request: RequestHeader) =
+    request.getHeader("User-Id").flatMap(decrypt) match {
+      case Some(userId) =>
+        request.withPrincipal(UserPrincipal.of(userId, request.principal))
+      case None => request
+    }
 
   override def transformServerResponse(response: ResponseHeader, request: RequestHeader) = response
 

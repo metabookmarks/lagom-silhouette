@@ -95,9 +95,10 @@ class SessionServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) ext
 }
 
 object SessionSerializerRegistry extends JsonSerializerRegistry {
-  override def serializers: Seq[JsonSerializer[_]] = Seq(
-    JsonSerializer[LoginInfoCreated],
-    JsonSerializer[AuthInfoUpdated],
-    JsonSerializer[AuthInfoDeleted]
-  )
+  override def serializers: Seq[JsonSerializer[_]] =
+    Seq(
+      JsonSerializer[LoginInfoCreated],
+      JsonSerializer[AuthInfoUpdated],
+      JsonSerializer[AuthInfoDeleted]
+    )
 }

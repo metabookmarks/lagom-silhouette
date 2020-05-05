@@ -20,17 +20,19 @@ class UserServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implic
   private def entity(email: String): PersistentEntityRef[UserCommand[_]] =
     persistentEntityRegistry.refFor[UserEntity](email)
 
-  override def getUser(email: String) = authenticated { _ =>
-    ServerServiceCall { _ =>
-      entity(email)
-        .ask(GetUser())
+  override def getUser(email: String) =
+    authenticated { _ =>
+      ServerServiceCall { _ =>
+        entity(email)
+          .ask(GetUser())
+      }
     }
-  }
 
-  override def updateProfile(email: String, providerId: String) = ServiceCall { profile =>
-    entity(email)
-      .ask(UpdateProfile(providerId, profile))
-  }
+  override def updateProfile(email: String, providerId: String) =
+    ServiceCall { profile =>
+      entity(email)
+        .ask(UpdateProfile(providerId, profile))
+    }
 
   override def usersTopic(): Topic[api.UserEvent] =
     TopicProducer.singleStreamWithOffset { fromOffset =>
@@ -47,34 +49,38 @@ class UserServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implic
                         profile.firstName,
                         profile.lastName,
                         profile.avatarURL,
-                        profile.activated)
+                        profile.activated
+        )
       case ProfileUpdated(email, providerId, profile) =>
         api.UserUpdated(email,
                         profile.fullName,
                         profile.firstName,
                         profile.lastName,
                         profile.avatarURL,
-                        profile.activated)
+                        profile.activated
+        )
     }
 
   private def newUser(email: String, create: AddProfile) =
     entity(email)
       .ask(create)
 
-  override def insertUser(providerId: String, providerKey: String, email: String) = ServiceCall { user =>
-    newUser(
-      email,
-      AddProfile(
-        providerId,
-        Profile(providerKey = providerKey,
-                firstName = user.firstName,
-                lastName = user.lastName,
-                fullName = user.fullName,
-                avatarURL = user.avatarURL,
-                activated = user.activated)
+  override def insertUser(providerId: String, providerKey: String, email: String) =
+    ServiceCall { user =>
+      newUser(
+        email,
+        AddProfile(
+          providerId,
+          Profile(providerKey = providerKey,
+                  firstName = user.firstName,
+                  lastName = user.lastName,
+                  fullName = user.fullName,
+                  avatarURL = user.avatarURL,
+                  activated = user.activated
+          )
+        )
       )
-    )
-  }
+    }
 
   /*
   .map{
@@ -94,7 +100,8 @@ class UserServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implic
                     lastName = user.lastName,
                     fullName = user.fullName,
                     avatarURL = user.avatarURL,
-                    activated = user.activated)
+                    activated = user.activated
+            )
           )
         )
       }

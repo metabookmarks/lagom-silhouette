@@ -37,8 +37,8 @@ class ChangePasswordController @Inject() (cc: ControllerComponents,
                                           passwordHasherRegistry: PasswordHasherRegistry,
                                           implicit val executionContext: ExecutionContext,
                                           implicit val webJarUtil: WebJarsUtil,
-                                          implicit val webJarAssets: WJA)
-    extends AbstractController(cc)
+                                          implicit val webJarAssets: WJA
+) extends AbstractController(cc)
     with I18nSupport {
 
   /**
@@ -46,19 +46,20 @@ class ChangePasswordController @Inject() (cc: ControllerComponents,
    *
    * @return The result to display.
    */
-  def view = silhouette.userAwareAction(silhouette.env).async { implicit b: UserAwareRequest[DefaultEnv, AnyContent] =>
-    userService.retrieve(b.identity.get.email).map { ou =>
-      Ok(io.metabookmarks.lagom.html.changePassword(ChangePasswordForm.form, ou.get))
+  def view =
+    silhouette.userAwareAction(silhouette.env).async { implicit b: UserAwareRequest[DefaultEnv, AnyContent] =>
+      userService.retrieve(b.identity.get.email).map { ou =>
+        Ok(io.metabookmarks.lagom.html.changePassword(ChangePasswordForm.form, ou.get))
+      }
     }
-  }
 
   /**
    * Changes the password.
    *
    * @return The result to display.
    */
-  def submit = silhouette.userAwareAction(silhouette.env).async {
-    implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
+  def submit =
+    silhouette.userAwareAction(silhouette.env).async { implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
       userService.retrieve(request.identity.get.email).flatMap { ou =>
         ChangePasswordForm.form.bindFromRequest.fold(
           form => Future.successful(BadRequest(io.metabookmarks.lagom.html.changePassword(form, ou.get))),
@@ -82,5 +83,5 @@ class ChangePasswordController @Inject() (cc: ControllerComponents,
         )
       }
 
-  }
+    }
 }

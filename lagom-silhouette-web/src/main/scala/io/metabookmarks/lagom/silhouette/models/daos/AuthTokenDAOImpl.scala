@@ -27,15 +27,16 @@ class AuthTokenDAOImpl extends AuthTokenDAO {
    *
    * @param dateTime The current date time.
    */
-  def findExpired(dateTime: DateTime) = Future.successful {
-    tokens
-      .filter {
-        case (id, token) =>
-          token.expiry.isBefore(dateTime)
-      }
-      .values
-      .toSeq
-  }
+  def findExpired(dateTime: DateTime) =
+    Future.successful {
+      tokens
+        .filter {
+          case (id, token) =>
+            token.expiry.isBefore(dateTime)
+        }
+        .values
+        .toSeq
+    }
 
   /**
    * Saves a token.

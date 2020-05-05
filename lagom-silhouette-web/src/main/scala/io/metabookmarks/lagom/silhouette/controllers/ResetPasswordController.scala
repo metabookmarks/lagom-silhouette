@@ -36,8 +36,8 @@ class ResetPasswordController @Inject() (cc: ControllerComponents,
                                          authTokenService: AuthTokenService,
                                          implicit val executionContext: ExecutionContext,
                                          implicit val webJarUtil: WebJarsUtil,
-                                         implicit val webJarAssets: WJA)
-    extends AbstractController(cc)
+                                         implicit val webJarAssets: WJA
+) extends AbstractController(cc)
     with I18nSupport {
 
   /**
@@ -46,14 +46,15 @@ class ResetPasswordController @Inject() (cc: ControllerComponents,
    * @param token The token to identify a user.
    * @return The result to display.
    */
-  def view(token: UUID) = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    authTokenService.validate(token).map {
-      case Some(authToken) => Ok(io.metabookmarks.lagom.html.resetPassword(ResetPasswordForm.form, token))
-      case None =>
-        Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
-          .flashing("error" -> Messages("invalid.reset.link"))
+  def view(token: UUID) =
+    silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+      authTokenService.validate(token).map {
+        case Some(authToken) => Ok(io.metabookmarks.lagom.html.resetPassword(ResetPasswordForm.form, token))
+        case None =>
+          Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+            .flashing("error" -> Messages("invalid.reset.link"))
+      }
     }
-  }
 
   /**
    * Resets the password.
@@ -61,33 +62,34 @@ class ResetPasswordController @Inject() (cc: ControllerComponents,
    * @param token The token to identify a user.
    * @return The result to display.
    */
-  def submit(token: UUID) = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    authTokenService.validate(token).flatMap {
-      case Some(authToken) =>
-        ResetPasswordForm.form.bindFromRequest.fold(
-          form => Future.successful(BadRequest(io.metabookmarks.lagom.html.resetPassword(form, token))),
-          password =>
-            userService.retrieve(authToken.email).flatMap {
-              case Some(user) =>
-                val passwordInfo = passwordHasherRegistry.current.hash(password)
-                authInfoRepository
-                  .update[PasswordInfo](LoginInfo(CredentialsProvider.ID, authToken.email), passwordInfo)
-                  .map { _ =>
+  def submit(token: UUID) =
+    silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+      authTokenService.validate(token).flatMap {
+        case Some(authToken) =>
+          ResetPasswordForm.form.bindFromRequest.fold(
+            form => Future.successful(BadRequest(io.metabookmarks.lagom.html.resetPassword(form, token))),
+            password =>
+              userService.retrieve(authToken.email).flatMap {
+                case Some(user) =>
+                  val passwordInfo = passwordHasherRegistry.current.hash(password)
+                  authInfoRepository
+                    .update[PasswordInfo](LoginInfo(CredentialsProvider.ID, authToken.email), passwordInfo)
+                    .map { _ =>
+                      Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+                        .flashing("success" -> Messages("password.reset"))
+                    }
+                case _ =>
+                  Future.successful(
                     Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
-                      .flashing("success" -> Messages("password.reset"))
-                  }
-              case _ =>
-                Future.successful(
-                  Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
-                    .flashing("error" -> Messages("invalid.reset.link"))
-                )
-            }
-        )
-      case None =>
-        Future.successful(
-          Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
-            .flashing("error" -> Messages("invalid.reset.link"))
-        )
+                      .flashing("error" -> Messages("invalid.reset.link"))
+                  )
+              }
+          )
+        case None =>
+          Future.successful(
+            Redirect(io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view())
+              .flashing("error" -> Messages("invalid.reset.link"))
+          )
+      }
     }
-  }
 }

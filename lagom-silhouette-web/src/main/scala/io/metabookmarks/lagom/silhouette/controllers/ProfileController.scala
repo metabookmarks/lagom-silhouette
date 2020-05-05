@@ -26,8 +26,8 @@ class ProfileController @Inject() (cc: ControllerComponents,
                                    onSuccess: Call,
                                    socialProviderRegistry: SocialProviderRegistry,
                                    implicit val webJarUtil: WebJarsUtil,
-                                   implicit val webJarAssets: WebJarAssets)
-    extends AbstractController(cc)
+                                   implicit val webJarAssets: WebJarAssets
+) extends AbstractController(cc)
     with I18nSupport
     with Circe {
 
@@ -36,15 +36,16 @@ class ProfileController @Inject() (cc: ControllerComponents,
    *
    * @return The result to display.
    */
-  def profile = silhouette.UserAwareAction.async { implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
-    request.identity
-      .map { user =>
-        userService.retrieve(user.email).map {
-          case Some(user) =>
-            Ok(user.asJson)
-          case None => NotFound
+  def profile =
+    silhouette.UserAwareAction.async { implicit request: UserAwareRequest[DefaultEnv, AnyContent] =>
+      request.identity
+        .map { user =>
+          userService.retrieve(user.email).map {
+            case Some(user) =>
+              Ok(user.asJson)
+            case None => NotFound
+          }
         }
-      }
-      .getOrElse(Future.successful(Unauthorized))
-  }
+        .getOrElse(Future.successful(Unauthorized))
+    }
 }

@@ -42,8 +42,8 @@ class SignUpController @Inject() (cc: ControllerComponents,
                                   mailerClient: MailerClient,
                                   implicit val executionContext: ExecutionContext,
                                   implicit val webJarUtil: WebJarsUtil,
-                                  implicit val webJarAssets: org.webjars.play.WebJarAssets)
-    extends AbstractController(cc)
+                                  implicit val webJarAssets: org.webjars.play.WebJarAssets
+) extends AbstractController(cc)
     with I18nSupport {
 
   /**
@@ -51,70 +51,72 @@ class SignUpController @Inject() (cc: ControllerComponents,
    *
    * @return The result to display.
    */
-  def view = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    Future.successful(Ok(io.metabookmarks.lagom.html.signUp(SignUpForm.form)))
-  }
+  def view =
+    silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+      Future.successful(Ok(io.metabookmarks.lagom.html.signUp(SignUpForm.form)))
+    }
 
   /**
    * Handles the submitted form.
    *
    * @return The result to display.
    */
-  def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    SignUpForm.form.bindFromRequest.fold(
-      form => Future.successful(BadRequest(io.metabookmarks.lagom.html.signUp(form))),
-      data => {
-        val result =
-          Redirect(routes.SignUpController.view()).flashing("info" -> Messages("sign.up.email.sent", data.email))
-        val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
-        userService.retrieve(loginInfo).flatMap {
-          case Some(user) =>
-            val url =
-              io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view().absoluteURL()
-            mailerClient.send(
-              Email(
-                subject = Messages("email.already.signed.up.subject"),
-                from = Messages("email.from"),
-                to = Seq(data.email),
-                bodyText = Some(io.metabookmarks.lagom.email.txt.alreadySignedUp(user, url).body),
-                bodyHtml = Some(io.metabookmarks.lagom.email.html.alreadySignedUp(user, url).body)
-              )
-            )
-
-            Future.successful(result)
-          case None =>
-            val authInfo = passwordHasherRegistry.current.hash(data.password)
-            val user = SilhouetteUser(
-              email = data.email,
-              firstName = Some(data.firstName),
-              lastName = Some(data.lastName),
-              fullName = Some(data.firstName + " " + data.lastName),
-              avatarURL = None,
-              activated = false,
-              profiles = Map.empty
-            )
-            for {
-              avatar <- avatarService.retrieveURL(data.email)
-              user <- userService.save(user.copy(avatarURL = avatar), loginInfo)
-              authInfo <- authInfoRepository.add(loginInfo, authInfo)
-              authToken <- authTokenService.create(user.email)
-            } yield {
-              val url = routes.ActivateAccountController.activate(authToken.id).absoluteURL()
+  def submit =
+    silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+      SignUpForm.form.bindFromRequest.fold(
+        form => Future.successful(BadRequest(io.metabookmarks.lagom.html.signUp(form))),
+        data => {
+          val result =
+            Redirect(routes.SignUpController.view()).flashing("info" -> Messages("sign.up.email.sent", data.email))
+          val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
+          userService.retrieve(loginInfo).flatMap {
+            case Some(user) =>
+              val url =
+                io.metabookmarks.lagom.silhouette.controllers.routes.SilhouetteSignInController.view().absoluteURL()
               mailerClient.send(
                 Email(
-                  subject = Messages("email.sign.up.subject"),
+                  subject = Messages("email.already.signed.up.subject"),
                   from = Messages("email.from"),
                   to = Seq(data.email),
-                  bodyText = Some(io.metabookmarks.lagom.email.txt.signUp(user, url).body),
-                  bodyHtml = Some(io.metabookmarks.lagom.email.html.signUp(user, url).body)
+                  bodyText = Some(io.metabookmarks.lagom.email.txt.alreadySignedUp(user, url).body),
+                  bodyHtml = Some(io.metabookmarks.lagom.email.html.alreadySignedUp(user, url).body)
                 )
               )
 
-              silhouette.env.eventBus.publish(SignUpEvent(user, request))
-              result
-            }
+              Future.successful(result)
+            case None =>
+              val authInfo = passwordHasherRegistry.current.hash(data.password)
+              val user = SilhouetteUser(
+                email = data.email,
+                firstName = Some(data.firstName),
+                lastName = Some(data.lastName),
+                fullName = Some(data.firstName + " " + data.lastName),
+                avatarURL = None,
+                activated = false,
+                profiles = Map.empty
+              )
+              for {
+                avatar <- avatarService.retrieveURL(data.email)
+                user <- userService.save(user.copy(avatarURL = avatar), loginInfo)
+                authInfo <- authInfoRepository.add(loginInfo, authInfo)
+                authToken <- authTokenService.create(user.email)
+              } yield {
+                val url = routes.ActivateAccountController.activate(authToken.id).absoluteURL()
+                mailerClient.send(
+                  Email(
+                    subject = Messages("email.sign.up.subject"),
+                    from = Messages("email.from"),
+                    to = Seq(data.email),
+                    bodyText = Some(io.metabookmarks.lagom.email.txt.signUp(user, url).body),
+                    bodyHtml = Some(io.metabookmarks.lagom.email.html.signUp(user, url).body)
+                  )
+                )
+
+                silhouette.env.eventBus.publish(SignUpEvent(user, request))
+                result
+              }
+          }
         }
-      }
-    )
-  }
+      )
+    }
 }
