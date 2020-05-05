@@ -1,7 +1,7 @@
 import com.typesafe.sbt.packager.docker._
 
-lazy val scala212 = "2.12.10"
-lazy val scala213 = "2.13.1"
+lazy val scala212 = "2.12.11"
+lazy val scala213 = "2.13.2"
 
 lazy val supportedScalaVersions = List(scala213, scala212)
 val circeVersion = "0.13.0"
@@ -75,7 +75,7 @@ val monocle = Seq(
 )
 
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "7.0.0"
-val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided"
+val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.4" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "2.1.1")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
