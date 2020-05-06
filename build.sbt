@@ -3,7 +3,10 @@ import com.typesafe.sbt.packager.docker._
 lazy val scala212 = "2.12.11"
 lazy val scala213 = "2.13.2"
 
-lazy val supportedScalaVersions = List(scala213, scala212)
+lazy val supportedScalaVersions = Seq(
+  crossScalaVersions := List(scala213, scala212)
+) 
+
 val circeVersion = "0.13.0"
 
 inThisBuild(
@@ -11,7 +14,6 @@ inThisBuild(
     resolvers ++= Seq("Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
                       Resolver.bintrayRepo("metabookmarks", "releases")),
     scalaVersion := scala213,
-    crossScalaVersions := supportedScalaVersions,
     organization := "io.metabookmarks.lagom",
     bintrayOrganization := Some("metabookmarks"),
     organizationName := "MetaBookMarks",
@@ -87,7 +89,7 @@ val playCirce =  Seq("com.dripower" %% "play-circe" % "2812.0",
 
 lazy val `lagom-silhouette` = (project in file("."))
   .settings(publish := {})
-  .aggregate(security, `session-api`, `session-impl`, `user-api`, `user-impl`, `lagom-silhouette-web`)
+  .aggregate(security, `session-api`, `session-impl`, `user-api`, `user-impl`, `lagom-silhouette-web`, `lagom-silhouette-web-ui`)
 
 lazy val security = (project in file("security"))
   .settings(commonSettings)
@@ -97,6 +99,8 @@ lazy val security = (project in file("security"))
         lagomScaladslServer % Optional,
         scalaTest
       )
+  ).settings(
+    supportedScalaVersions
   )
 
 lazy val `session-api` = (project in file("session-api"))
@@ -107,6 +111,8 @@ lazy val `session-api` = (project in file("session-api"))
         playJsonDerivedCodecs,
         lagomMacro
       )
+  ).settings(
+    supportedScalaVersions
   )
   .dependsOn(security)
 
@@ -122,6 +128,8 @@ lazy val `session-impl` = (project in file("session-impl"))
         chimney,
         scalaTest
       )
+  ).settings(
+    supportedScalaVersions
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`session-api`)
@@ -134,6 +142,8 @@ lazy val `user-api` = (project in file("user-api"))
         playJsonDerivedCodecs,
         lagomMacro
       )
+  ).settings(
+    supportedScalaVersions
   )
   .dependsOn(security)
 
@@ -149,21 +159,24 @@ lazy val `user-impl` = (project in file("user-impl"))
         macwire,
         scalaTest
       )
+  ).settings(
+    supportedScalaVersions
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`user-api`)
 
 val silhouetteVersion = "7.0.0"
 
-lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
+lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette/web"))
   .enablePlugins(play.sbt.routes.RoutesCompiler, SbtTwirl)
-  .dependsOn(security, `session-api`, `user-api`)
+  .dependsOn(security, `session-api`, `user-api`, `lagom-silhouette-web-shared-js`)
   .settings(commonSettings)
   .settings(
     resolvers += "Atlasian" at "https://maven.atlassian.com/content/repositories/atlassian-public",
     libraryDependencies ++= cats ++ playCirce ++ Seq(
         lagomScaladslServer,
         macwire,
+        chimney,
         scalaTest,
         "com.mohiva" %% "play-silhouette" % silhouetteVersion,
         "com.mohiva" %% "play-silhouette-password-bcrypt" % silhouetteVersion,
@@ -190,6 +203,8 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
                                       "play.api.mvc._",
                                       "views.html._"),
     sources in (Compile, play.sbt.routes.RoutesKeys.routes) ++= ((unmanagedResourceDirectories in Compile).value * "silhouette.routes").get
+  ).settings(
+    supportedScalaVersions
   )
   .enablePlugins(SbtWeb)
 
@@ -207,3 +222,53 @@ releaseProcess := Seq[ReleaseStep](
   commitNextVersion,
   pushChanges
 )
+
+
+val slinkyVersion = "0.6.5"
+
+lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui"))
+  .enablePlugins(ScalaJSPlugin,ScalaJSBundlerPlugin)
+  .settings( crossScalaVersions := Seq(scala213))
+   .settings(commonSettings)
+  .settings(
+    scalaJSUseMainModuleInitializer := true,
+    libraryDependencies ++= Seq(
+      "org.scala-js" %%% "scalajs-dom" % "1.0.0",
+      "me.shadaj" %%% "slinky-core" % slinkyVersion, // core React functionality, no React DOM
+      "me.shadaj" %%% "slinky-web" % slinkyVersion, // React DOM, HTML and SVG tags
+//      "me.shadaj" %%% "slinky-hot" % slinkyVersion // Hot loading, requires react-proxy package
+      //"me.shadaj" %%% "slinky-scalajsreact-interop" % "0.6.4" // Interop with japgolly/scalajs-react,
+      "io.metabookmarks" %%% "slinky-material-ui" % "0.0.1-SNAPSHOT",
+      "io.circe" %%% "circe-parser" % circeVersion,
+      "io.circe" %%% "circe-generic" % circeVersion,
+      "com.softwaremill.sttp.client" %%% "core" % "2.1.1"
+    ),
+    //Compile / npmDependencies  += "material-components-web" -> "6.0.0-canary.4b04cdb0f.0",
+    Compile / npmDependencies  += "material-components-web" -> "6.0.0",
+    Compile / npmDependencies += "react" -> "16.13.1",
+    Compile / npmDependencies += "react-dom" -> "16.13.1",
+    Compile / npmDependencies += "@material-ui/core" -> "4.9.11",
+    Compile / npmDependencies += "@material-ui/pickers" -> "3.2.10",
+    Compile / npmDependencies += "@date-io/core" -> "1.3.6",
+    Compile / npmDependencies += "@date-io/date-fns" -> "1.3.13",
+    Compile / npmDependencies += "@date-io/dayjs" -> "1.3.13",
+    Compile / npmDependencies += "dayjs" -> "1.8.24",
+    Compile / npmDependencies += "date-fns" -> "2.12.0",
+    )
+    .settings(commonSettings)
+   
+  .dependsOn(`lagom-silhouette-web-shared-js`)
+  .aggregate(`lagom-silhouette-web-shared-js`)
+
+lazy val `lagom-silhouette-web-shared` = (crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure).in(file("lagom-silhouette/web-shared")))
+  .jsSettings(name := "lagom-silhouette-web-shared-js")
+  .jvmSettings(name := "lagom-silhouette-web-shared-jvm")
+  .settings(libraryDependencies ++= Seq(
+    "io.circe" %%% "circe-core",
+    "io.circe" %%% "circe-generic",
+    "io.circe" %%% "circe-parser"
+  ).map(_ % circeVersion))
+
+lazy val `lagom-silhouette-web-shared-jvm` = `lagom-silhouette-web-shared`.jvm
+lazy val `lagom-silhouette-web-shared-js` = `lagom-silhouette-web-shared`.js

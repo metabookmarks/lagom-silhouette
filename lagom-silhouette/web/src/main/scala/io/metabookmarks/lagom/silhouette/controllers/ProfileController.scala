@@ -19,6 +19,9 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import io.circe.Encoder
 
+import io.scalaland.chimney.dsl._
+import io.metabookmarks.silhouette.User
+
 class ProfileController @Inject() (cc: ControllerComponents,
                                    override val messagesApi: MessagesApi,
                                    silhouette: Silhouette[DefaultEnv],
@@ -42,7 +45,7 @@ class ProfileController @Inject() (cc: ControllerComponents,
         .map { user =>
           userService.retrieve(user.email).map {
             case Some(user) =>
-              Ok(user.asJson)
+              Ok(user.into[User].transform.asJson)
             case None => NotFound
           }
         }
