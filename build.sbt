@@ -28,12 +28,13 @@ inThisBuild(
         )
       ),
     scalafmtOnCompile := true,
+    javacOptions ++= Seq("-source", "11", "-target", "11"),
     scalacOptions ++= Seq(
         //      "-Xplugin-require:macroparadise",
         "-unchecked",
         "-deprecation",
         "-language:_",
-        "-target:jvm-1.8",
+        "-target:jvm-11",
         "-encoding",
         "UTF-8"
       ) // ++ crossFlags(scalaVersion.value),
@@ -78,7 +79,7 @@ val monocle = Seq(
 
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "7.0.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.5" % "provided"
-val scalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % Test
+val scalaTest = "org.scalatest" %% "scalatest" % "3.1.2" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "2.1.1")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
 val chimney = "io.scalaland" %% "chimney" % "0.5.1"
@@ -243,17 +244,18 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
       "io.circe" %%% "circe-generic" % circeVersion,
       "com.softwaremill.sttp.client" %%% "core" % "2.1.1"
     ),
-    //Compile / npmDependencies  += "material-components-web" -> "6.0.0-canary.4b04cdb0f.0",
-    Compile / npmDependencies  += "material-components-web" -> "6.0.0",
+    
+    Compile / npmDependencies += "material-components-web" -> "6.0.0",
     Compile / npmDependencies += "react" -> "16.13.1",
     Compile / npmDependencies += "react-dom" -> "16.13.1",
-    Compile / npmDependencies += "@material-ui/core" -> "4.9.11",
+    Compile / npmDependencies += "@material-ui/icons" -> "4.9.1",
+    Compile / npmDependencies += "@material-ui/core" -> "4.9.13",
     Compile / npmDependencies += "@material-ui/pickers" -> "3.2.10",
     Compile / npmDependencies += "@date-io/core" -> "1.3.6",
     Compile / npmDependencies += "@date-io/date-fns" -> "1.3.13",
     Compile / npmDependencies += "@date-io/dayjs" -> "1.3.13",
     Compile / npmDependencies += "dayjs" -> "1.8.24",
-    Compile / npmDependencies += "date-fns" -> "2.12.0",
+    Compile / npmDependencies += "date-fns" -> "2.12.0"
     )
     .settings(commonSettings)
    
