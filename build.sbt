@@ -82,7 +82,7 @@ val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.5" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.1.2" % Test
 val cats = Seq("org.typelevel" %% "cats-core" % "2.1.1")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
-val chimney = "io.scalaland" %% "chimney" % "0.5.1"
+val chimney = "io.scalaland" %% "chimney" % "0.5.2"
 
 val playCirce =  Seq("com.dripower" %% "play-circe" % "2812.0",
       "io.circe" %% "circe-parser" % circeVersion,
