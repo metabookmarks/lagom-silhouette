@@ -255,7 +255,9 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
     Compile / npmDependencies += "@date-io/date-fns" -> "1.3.13",
     Compile / npmDependencies += "@date-io/dayjs" -> "1.3.13",
     Compile / npmDependencies += "dayjs" -> "1.8.24",
-    Compile / npmDependencies += "date-fns" -> "2.12.0"
+    Compile / npmDependencies += "date-fns" -> "2.12.0",
+    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.4" % "test",
+testFrameworks += new TestFramework("utest.runner.Framework")
     )
     .settings(commonSettings)
    
@@ -270,7 +272,10 @@ lazy val `lagom-silhouette-web-shared` = (crossProject(JSPlatform, JVMPlatform)
     "io.circe" %%% "circe-core",
     "io.circe" %%% "circe-generic",
     "io.circe" %%% "circe-parser"
-  ).map(_ % circeVersion))
+  ).map(_ % circeVersion),
+  libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.4" % "test",
+testFrameworks += new TestFramework("utest.runner.Framework")
+  )
 
 lazy val `lagom-silhouette-web-shared-jvm` = `lagom-silhouette-web-shared`.jvm
 lazy val `lagom-silhouette-web-shared-js` = `lagom-silhouette-web-shared`.js

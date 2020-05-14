@@ -1,6 +1,6 @@
 resolvers += Resolver.bintrayIvyRepo("metabookmarks", "sbt-plugin-releases")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.4")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0")
 
 addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.6.2")
 
