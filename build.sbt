@@ -178,7 +178,7 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette-web"))
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
         "com.adrianhurt" %% "play-bootstrap" % "1.5.1-P27-B4",        
         "com.iheart" %% "ficus" % "1.4.7",
-        "org.webjars" % "bootstrap" % "4.4.1-1",
+        "org.webjars" % "bootstrap" % "4.5.0",
         "org.ocpsoft.prettytime" % "prettytime" % "4.0.5.Final",
         "org.webjars" % "foundation" % "6.4.3-1",
         "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3"
