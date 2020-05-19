@@ -11,9 +11,9 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.0")
 addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.3")
 
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.0.1")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.1.0")
 addSbtPlugin("org.scala-js" % "sbt-jsdependencies" % "1.0.0")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.0.0")
-addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.17.0")
+addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.18.0")
 
 //addSbtPlugin("io.chrisdavenport" % "sbt-mima-version-check" % "0.1.0")
