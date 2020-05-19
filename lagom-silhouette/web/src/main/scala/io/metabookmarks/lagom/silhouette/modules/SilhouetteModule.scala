@@ -326,6 +326,7 @@ trait SilhouetteModule
 
   def resolver: AssetResolver
 
+  lazy val lagomProviders = wire[ProvidersController]
   lazy val lagomSignIn = wire[SilhouetteSignInController]
   lazy val lagomActivateAccountController = wire[ActivateAccountController]
   lazy val lagomSignUpController = wire[SignUpController]

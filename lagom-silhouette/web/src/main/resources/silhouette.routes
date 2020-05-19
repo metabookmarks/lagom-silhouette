@@ -1,3 +1,6 @@
+GET         /providers                       io.metabookmarks.lagom.silhouette.controllers.ProvidersController.availables
+
+
 GET         /signUp                          io.metabookmarks.lagom.silhouette.controllers.SignUpController.view
 POST        /signUp                          io.metabookmarks.lagom.silhouette.controllers.SignUpController.submit
 
