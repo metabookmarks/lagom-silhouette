@@ -50,6 +50,7 @@ import play.api.mvc._
 import play.filters.csrf.CSRFComponents
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.Try
 
 trait SilhouetteModule
     extends I18nComponents
@@ -209,10 +210,11 @@ trait SilhouetteModule
         httpLayer: HTTPLayer,
         stateProvider: SocialStateHandler,
         configuration: Configuration
-    ): FacebookProvider = {
-      val settings = configuration.underlying.as[OAuth2Settings]("silhouette.facebook")
-      new FacebookProvider(httpLayer, stateProvider, settings)
-    }
+    ): Option[FacebookProvider] =
+      Try {
+        val settings = configuration.underlying.as[OAuth2Settings]("silhouette.facebook")
+        new FacebookProvider(httpLayer, stateProvider, settings)
+      }.toOption
   }
 
   object SilhouetteGoogleProvider {
@@ -220,10 +222,11 @@ trait SilhouetteModule
         httpLayer: HTTPLayer,
         stateProvider: SocialStateHandler,
         configuration: Configuration
-    ): GoogleProvider = {
-      val settings = configuration.underlying.as[OAuth2Settings]("silhouette.google")
-      new GoogleProvider(httpLayer, stateProvider, settings)
-    }
+    ): Option[GoogleProvider] =
+      Try {
+        val settings = configuration.underlying.as[OAuth2Settings]("silhouette.google")
+        new GoogleProvider(httpLayer, stateProvider, settings)
+      }.toOption
   }
 
   object SilhouetteVKProvider {
@@ -231,10 +234,11 @@ trait SilhouetteModule
         httpLayer: HTTPLayer,
         stateProvider: SocialStateHandler,
         configuration: Configuration
-    ): VKProvider = {
-      val settings = configuration.underlying.as[OAuth2Settings]("silhouette.vk")
-      new VKProvider(httpLayer, stateProvider, settings)
-    }
+    ): Option[VKProvider] =
+      Try {
+        val settings = configuration.underlying.as[OAuth2Settings]("silhouette.vk")
+        new VKProvider(httpLayer, stateProvider, settings)
+      }.toOption
   }
 
   object SilhouetteTwitterProvider {
@@ -242,10 +246,11 @@ trait SilhouetteModule
         httpLayer: HTTPLayer,
         tokenSecretProvider: OAuth1TokenSecretProvider,
         configuration: Configuration
-    ): TwitterProvider = {
-      val settings = configuration.underlying.as[OAuth1Settings]("silhouette.twitter")
-      new TwitterProvider(httpLayer, new PlayOAuth1Service(settings), tokenSecretProvider, settings)
-    }
+    ): Option[TwitterProvider] =
+      Try {
+        val settings = configuration.underlying.as[OAuth1Settings]("silhouette.twitter")
+        new TwitterProvider(httpLayer, new PlayOAuth1Service(settings), tokenSecretProvider, settings)
+      }.toOption
   }
 
   object SilhouetteXingProvider {
@@ -253,10 +258,11 @@ trait SilhouetteModule
         httpLayer: HTTPLayer,
         tokenSecretProvider: OAuth1TokenSecretProvider,
         configuration: Configuration
-    ): XingProvider = {
-      val settings = configuration.underlying.as[OAuth1Settings]("silhouette.xing")
-      new XingProvider(httpLayer, new PlayOAuth1Service(settings), tokenSecretProvider, settings)
-    }
+    ): Option[XingProvider] =
+      Try {
+        val settings = configuration.underlying.as[OAuth1Settings]("silhouette.xing")
+        new XingProvider(httpLayer, new PlayOAuth1Service(settings), tokenSecretProvider, settings)
+      }.toOption
   }
 
   object SilhouetteYahooProvider {
@@ -264,20 +270,21 @@ trait SilhouetteModule
         httpLayer: HTTPLayer,
         client: OpenIdClient,
         configuration: Configuration
-    ): YahooProvider = {
-      val settings = configuration.underlying.as[OpenIDSettings]("silhouette.yahoo")
-      new YahooProvider(httpLayer, new PlayOpenIDService(client, settings), settings)
-    }
+    ): Option[YahooProvider] =
+      Try {
+        val settings = configuration.underlying.as[OpenIDSettings]("silhouette.yahoo")
+        new YahooProvider(httpLayer, new PlayOpenIDService(client, settings), settings)
+      }.toOption
   }
 
   object SilhouetteSocialProviderRegistry {
     def apply(
-        facebookProvider: FacebookProvider,
-        googleProvider: GoogleProvider,
-        vkProvider: VKProvider,
-        twitterProvider: TwitterProvider,
-        xingProvider: XingProvider,
-        yahooProvider: YahooProvider
+        facebookProvider: Option[FacebookProvider],
+        googleProvider: Option[GoogleProvider],
+        vkProvider: Option[VKProvider],
+        twitterProvider: Option[TwitterProvider],
+        xingProvider: Option[XingProvider],
+        yahooProvider: Option[YahooProvider]
     ): SocialProviderRegistry =
       SocialProviderRegistry(
         Seq(
@@ -287,7 +294,7 @@ trait SilhouetteModule
           vkProvider,
           xingProvider,
           yahooProvider
-        )
+        ).flatten
       )
   }
 
