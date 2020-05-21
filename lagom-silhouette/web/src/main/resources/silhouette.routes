@@ -1,6 +1,5 @@
 GET         /providers                       io.metabookmarks.lagom.silhouette.controllers.ProvidersController.availables
 
-
 GET         /signUp                          io.metabookmarks.lagom.silhouette.controllers.SignUpController.view
 POST        /signUp                          io.metabookmarks.lagom.silhouette.controllers.SignUpController.submit
 
@@ -25,3 +24,7 @@ POST        /password/change                 io.metabookmarks.lagom.silhouette.c
 GET         /authenticate/:provider          io.metabookmarks.lagom.silhouette.controllers.SocialAuthController.authenticate(provider)
 
 GET         /signOut                         io.metabookmarks.lagom.silhouette.controllers.SignOutController.signOut
+
+#GET         /img/:id                         io.metabookmarks.lagom.silhouette.controllers.AssetControllerController.availables
+# Map static resources from the /public folder to the /assets URL path
+#GET         /assets/*file                    controllers.Assets.at(path="/public", file)
