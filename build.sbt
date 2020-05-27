@@ -1,10 +1,9 @@
 import com.typesafe.sbt.packager.docker._
 
-lazy val scala212 = "2.12.11"
 lazy val scala213 = "2.13.2"
 
 lazy val supportedScalaVersions = Seq(
-  crossScalaVersions := List(scala213, scala212)
+  crossScalaVersions := List(scala213)
 )
 
 val circeVersion = "0.13.0"
