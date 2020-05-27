@@ -40,7 +40,7 @@ trait LoginPanelStyles extends js.Object {
     implicit val sttpBackend = FetchBackend()
 
     basicRequest
-      .get(uri"${props.origin}origin/auth/providers")
+      .get(uri"${props.origin}/auth/providers")
       .send()
       .foreach {
         case resp =>
@@ -60,23 +60,25 @@ trait LoginPanelStyles extends js.Object {
 
   case class Props(providers: List[Provider])
 
-  val useStyles = makeStyles[LoginPanelStyles](
-    "root" -> CSS(
-      "flexGrow" -> 1
-    ),
-    "paper" -> CSS(
-      "margin" -> "auto",
-      "maxWidth" -> 500
-    ),
-    "image" -> CSS(
-      "width" -> 128,
-      "heigh" -> 128
-    ),
-    "img" -> CSS(
-      "margin" -> "auto",
-      "display" -> "block",
-      "maxWidth" -> "48px",
-      "maxHeight" -> "48px"
+  val useStyles = makeStyles[LoginPanelStyles]((theme: js.Object) =>
+    CSS(
+      "root" -> CSS(
+        "flexGrow" -> 1
+      ),
+      "paper" -> CSS(
+        "margin" -> "auto",
+        "maxWidth" -> 500
+      ),
+      "image" -> CSS(
+        "width" -> 128,
+        "heigh" -> 128
+      ),
+      "img" -> CSS(
+        "margin" -> "auto",
+        "display" -> "block",
+        "maxWidth" -> "48px",
+        "maxHeight" -> "48px"
+      )
     )
   )
 
@@ -85,8 +87,8 @@ trait LoginPanelStyles extends js.Object {
 
     def providerPanel(provider: Provider) =
       GridItem(provider.name)(
-        ButtonBase(className = classes.image)(
-          img(className := classes.img, src := s"/auth/assets/providers/$provider.png")
+        Button(classes = classes, onClick = e => println("o"))(href := s"/auth/authenticate/${provider.name}")(
+          img(className := s"${classes.img} ${provider.name}", src := s"/auth/img/provider/${provider.name}.png")
         )
       )
 
