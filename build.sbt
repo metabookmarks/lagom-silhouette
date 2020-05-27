@@ -266,6 +266,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
   .settings(commonSettings)
   .settings(
     scalaJSUseMainModuleInitializer := true,
+     bintrayRepository := "releases",
     libraryDependencies ++= Seq(
         "org.scala-js" %%% "scalajs-dom" % "1.0.0",
         "me.shadaj" %%% "slinky-core" % slinkyVersion, // core React functionality, no React DOM
@@ -301,6 +302,7 @@ lazy val `lagom-silhouette-web-shared` = (crossProject(JSPlatform, JVMPlatform)
   .jsSettings(name := "lagom-silhouette-web-shared-js")
   .jvmSettings(name := "lagom-silhouette-web-shared-jvm")
   .settings(
+     bintrayRepository := "releases",
     libraryDependencies ++= Seq(
         "io.circe" %%% "circe-core",
         "io.circe" %%% "circe-generic",
