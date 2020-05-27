@@ -276,7 +276,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
         "io.metabookmarks" %%% "slinky-material-ui" % "0.0.1-SNAPSHOT",
         "io.circe" %%% "circe-parser" % circeVersion,
         "io.circe" %%% "circe-generic" % circeVersion,
-        "com.softwaremill.sttp.client" %%% "core" % "2.1.4"
+        "com.softwaremill.sttp.client" %%% "core" % "2.1.5"
       ),
     Compile / npmDependencies += "material-components-web" -> "6.0.0",
     Compile / npmDependencies += "react" -> "16.13.1",
