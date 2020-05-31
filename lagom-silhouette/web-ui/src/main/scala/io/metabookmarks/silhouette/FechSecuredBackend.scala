@@ -21,6 +21,27 @@ import slinky.materialui.core.Snackbar
 import io.metabookmarks.slinky.RenderElement
 
 object ErrorHandlers {
+
+  def onError(message: String): Unit = {
+
+    @react object Aieaie {
+      case class Props(message: String, parent: org.scalajs.dom.raw.Element)
+      val component = FunctionalComponent[Props] { props =>
+        val (open, setOpen) = useState(true)
+
+        val exit = () => {
+          setOpen(false)
+          ReactDOM.unmountComponentAtNode(props.parent)
+          document.body.removeChild(props.parent)
+        }
+
+        Snackbar(open = open, message = s"Resquest failed ($message)", autoHideDuration = 5000, onClose = exit)
+      }
+    }
+
+    RenderElement.temporary(container => Aieaie(message, container))
+  }
+
   def onDisconnect(message: String): Unit = {
 
     @react object Byebye {
@@ -43,7 +64,9 @@ object ErrorHandlers {
   }
 }
 
-class FechSecuredBackend(onError: String => Unit, onDisconnect: String => Unit = ErrorHandlers.onDisconnect)(implicit
+class FechSecuredBackend(onError: String => Unit = ErrorHandlers.onError,
+                         onDisconnect: String => Unit = ErrorHandlers.onDisconnect
+)(implicit
     sttpBackend: SttpBackend[Future, Nothing, sttp.client.NothingT] = FetchBackend()
 ) {
   private def nocheck =
