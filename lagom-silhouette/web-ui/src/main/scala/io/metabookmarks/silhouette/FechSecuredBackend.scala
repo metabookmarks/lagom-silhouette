@@ -21,6 +21,27 @@ import slinky.materialui.core.Snackbar
 import io.metabookmarks.slinky.RenderElement
 
 object ErrorHandlers {
+
+  def onError(message: String): Unit = {
+
+    @react object Aieaie {
+      case class Props(message: String, parent: org.scalajs.dom.raw.Element)
+      val component = FunctionalComponent[Props] { props =>
+        val (open, setOpen) = useState(true)
+
+        val exit = () => {
+          setOpen(false)
+          ReactDOM.unmountComponentAtNode(props.parent)
+          document.body.removeChild(props.parent)
+        }
+
+        Snackbar(open = open, message = s"Resquest failed ($message)", autoHideDuration = 5000, onClose = exit)
+      }
+    }
+
+    RenderElement.temporary(container => Aieaie(message, container))
+  }
+
   def onDisconnect(message: String): Unit = {
 
     @react object Byebye {
@@ -43,7 +64,9 @@ object ErrorHandlers {
   }
 }
 
-class FechSecuredBackend(onError: String => Unit, onDisconnect: String => Unit = ErrorHandlers.onDisconnect)(implicit
+class FechSecuredBackendService(onError: String => Unit = ErrorHandlers.onError,
+                                onDisconnect: String => Unit = ErrorHandlers.onDisconnect
+)(implicit
     sttpBackend: SttpBackend[Future, Nothing, sttp.client.NothingT] = FetchBackend()
 ) {
   private def nocheck =
@@ -56,8 +79,26 @@ class FechSecuredBackend(onError: String => Unit, onDisconnect: String => Unit =
         .get(uri)
     )(f)
 
+  def put[A](uri: Uri, params: (String, String)*)(f: A => Unit)(implicit dec: Decoder[A]): Unit =
+    send(nocheck.put(uri).body(params: _*))(f)
+
   def post[A](uri: Uri, params: (String, String)*)(f: A => Unit)(implicit dec: Decoder[A]): Unit =
     send(nocheck.post(uri).body(params: _*))(f)
+
+  def delete(uri: Uri)(handle: () => Unit): Unit =
+    nocheck.delete(uri).send().onComplete {
+      case Success(res) =>
+        res.body match {
+          case Right(body) =>
+            handle()
+
+          case Left(value) =>
+            if (res.code == StatusCode.Unauthorized)
+              onDisconnect("Unauthorized")
+        }
+      case Failure(exception) =>
+        onError(exception.getMessage())
+    }
 
   def send[A](request: Request[Either[String, String], Nothing])(handle: A => Unit)(implicit dec: Decoder[A]): Unit =
     request
@@ -81,6 +122,7 @@ class FechSecuredBackend(onError: String => Unit, onDisconnect: String => Unit =
             onDisconnect("Unauthorized")
 
       }
-    case Failure(err) =>
+    case Failure(error) =>
+      onError(error.getMessage())
   }
 }
