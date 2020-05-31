@@ -64,8 +64,8 @@ object ErrorHandlers {
   }
 }
 
-class FechSecuredBackend(onError: String => Unit = ErrorHandlers.onError,
-                         onDisconnect: String => Unit = ErrorHandlers.onDisconnect
+class FechSecuredBackendService(onError: String => Unit = ErrorHandlers.onError,
+                                onDisconnect: String => Unit = ErrorHandlers.onDisconnect
 )(implicit
     sttpBackend: SttpBackend[Future, Nothing, sttp.client.NothingT] = FetchBackend()
 ) {
@@ -79,8 +79,26 @@ class FechSecuredBackend(onError: String => Unit = ErrorHandlers.onError,
         .get(uri)
     )(f)
 
+  def put[A](uri: Uri, params: (String, String)*)(f: A => Unit)(implicit dec: Decoder[A]): Unit =
+    send(nocheck.put(uri).body(params: _*))(f)
+
   def post[A](uri: Uri, params: (String, String)*)(f: A => Unit)(implicit dec: Decoder[A]): Unit =
     send(nocheck.post(uri).body(params: _*))(f)
+
+  def delete(uri: Uri)(handle: () => Unit): Unit =
+    nocheck.delete(uri).send().onComplete {
+      case Success(res) =>
+        res.body match {
+          case Right(body) =>
+            handle()
+
+          case Left(value) =>
+            if (res.code == StatusCode.Unauthorized)
+              onDisconnect("Unauthorized")
+        }
+      case Failure(exception) =>
+        onError(exception.getMessage())
+    }
 
   def send[A](request: Request[Either[String, String], Nothing])(handle: A => Unit)(implicit dec: Decoder[A]): Unit =
     request
@@ -104,6 +122,7 @@ class FechSecuredBackend(onError: String => Unit = ErrorHandlers.onError,
             onDisconnect("Unauthorized")
 
       }
-    case Failure(err) =>
+    case Failure(error) =>
+      onError(error.getMessage())
   }
 }
