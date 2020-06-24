@@ -1,8 +1,10 @@
 package io.metabookmarks.user.impl
 
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec}
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.BeforeAndAfterAll
 
-class UserEntitySpec extends WordSpec with Matchers with BeforeAndAfterAll {
+class UserEntitySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll {
   /*
 
 private val system = ActorSystem("MetabookmarksEntitySpec",
