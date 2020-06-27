@@ -1,6 +1,6 @@
 import com.typesafe.sbt.packager.docker._
 
-lazy val scala213 = "2.13.2"
+lazy val scala213 = "2.13.3"
 
 lazy val supportedScalaVersions = Seq(
   crossScalaVersions := List(scala213)
@@ -273,7 +273,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
         "me.shadaj" %%% "slinky-web" % slinkyVersion, // React DOM, HTML and SVG tags
 //      "me.shadaj" %%% "slinky-hot" % slinkyVersion // Hot loading, requires react-proxy package
         //"me.shadaj" %%% "slinky-scalajsreact-interop" % "0.6.4" // Interop with japgolly/scalajs-react,
-        "io.metabookmarks" %%% "slinky-material-ui" % "0.0.2",
+        "io.metabookmarks" %%% "slinky-material-ui" % "0.0.3",
         "io.circe" %%% "circe-parser" % circeVersion,
         "io.circe" %%% "circe-generic" % circeVersion,
         "com.softwaremill.sttp.client" %%% "core" % "2.2.1"
@@ -281,7 +281,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
     Compile / npmDependencies += "material-components-web" -> "6.0.0",
     Compile / npmDependencies += "react" -> "16.13.1",
     Compile / npmDependencies += "react-dom" -> "16.13.1",
-    Compile / npmDependencies += "@material-ui/icons" -> "4.9.1",
+    Compile / npmDependencies += "@material-ui/icons" -> "4.10.2",
     Compile / npmDependencies += "@material-ui/core" -> "4.9.13",
     Compile / npmDependencies += "@material-ui/pickers" -> "3.2.10",
     Compile / npmDependencies += "@date-io/core" -> "1.3.6",
