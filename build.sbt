@@ -273,7 +273,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
         "me.shadaj" %%% "slinky-web" % slinkyVersion, // React DOM, HTML and SVG tags
 //      "me.shadaj" %%% "slinky-hot" % slinkyVersion // Hot loading, requires react-proxy package
         //"me.shadaj" %%% "slinky-scalajsreact-interop" % "0.6.4" // Interop with japgolly/scalajs-react,
-        "io.metabookmarks" %%% "slinky-material-ui" % "0.0.3",
+        "io.metabookmarks" %%% "slinky-material-ui" % "0.0.4",
         "io.circe" %%% "circe-parser" % circeVersion,
         "io.circe" %%% "circe-generic" % circeVersion,
         "com.softwaremill.sttp.client" %%% "core" % "2.2.1"
