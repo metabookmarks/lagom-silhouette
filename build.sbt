@@ -268,7 +268,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
     scalaJSUseMainModuleInitializer := true,
      bintrayRepository := "releases",
     libraryDependencies ++= Seq(
-        "org.scala-js" %%% "scalajs-dom" % "1.0.0",
+        "org.scala-js" %%% "scalajs-dom" % "1.1.0",
         "me.shadaj" %%% "slinky-core" % slinkyVersion, // core React functionality, no React DOM
         "me.shadaj" %%% "slinky-web" % slinkyVersion, // React DOM, HTML and SVG tags
 //      "me.shadaj" %%% "slinky-hot" % slinkyVersion // Hot loading, requires react-proxy package
