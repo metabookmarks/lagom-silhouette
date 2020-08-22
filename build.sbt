@@ -276,7 +276,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
         "io.metabookmarks" %%% "slinky-material-ui" % "0.0.4",
         "io.circe" %%% "circe-parser" % circeVersion,
         "io.circe" %%% "circe-generic" % circeVersion,
-        "com.softwaremill.sttp.client" %%% "core" % "2.2.4"
+        "com.softwaremill.sttp.client" %%% "core" % "2.2.5"
       ),
     libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.4" % "test",
     testFrameworks += new TestFramework("utest.runner.Framework")
