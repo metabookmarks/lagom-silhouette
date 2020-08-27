@@ -257,7 +257,7 @@ def nexusNpmSettings =
     )
     .toSeq
 
-val slinkyVersion = "0.6.5"
+val slinkyVersion = "0.6.6"
 
 lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui"))
   .enablePlugins(ScalaJSPlugin, ScalaJSBundlerPlugin)
