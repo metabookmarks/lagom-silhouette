@@ -49,8 +49,11 @@ trait LoginPanelStyles extends js.Object {
               decode[List[Provider]](body) match {
                 case Right(providers) =>
                   setState(st => st.copy(providers = providers))
+                case Left(value) =>
+                  println(s"ERROR: $value")
               }
-
+            case Left(value) =>
+              println(s"ERROR: $value")
           }
       }
   }
