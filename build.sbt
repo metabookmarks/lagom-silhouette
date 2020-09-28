@@ -82,7 +82,7 @@ val monocle = Seq(
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "7.0.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.7" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.2" % Test
-val cats = Seq("org.typelevel" %% "cats-core" % "2.1.1")
+val cats = Seq("org.typelevel" %% "cats-core" % "2.2.0")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
 val chimney = "io.scalaland" %% "chimney" % "0.5.3"
 
@@ -213,8 +213,8 @@ lazy val `lagom-silhouette-web` = (project in file("lagom-silhouette/web"))
 //      "com.typesafe.play" %% "play-slick" % "4.0.0",
         "com.adrianhurt" %% "play-bootstrap" % "1.5.1-P27-B4",
         "com.iheart" %% "ficus" % "1.5.0",
-        "org.webjars" % "bootstrap" % "4.5.2",
-        "org.ocpsoft.prettytime" % "prettytime" % "4.0.5.Final",
+        "org.webjars" % "bootstrap" % "4.4.1-1",
+        "org.ocpsoft.prettytime" % "prettytime" % "4.0.6.Final",
         "org.webjars" % "foundation" % "6.4.3-1",
         "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3"
       ),
@@ -257,7 +257,7 @@ def nexusNpmSettings =
     )
     .toSeq
 
-val slinkyVersion = "0.6.5"
+val slinkyVersion = "0.6.6"
 
 lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui"))
   .enablePlugins(ScalaJSPlugin, ScalaJSBundlerPlugin)
@@ -273,12 +273,12 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
         "me.shadaj" %%% "slinky-web" % slinkyVersion, // React DOM, HTML and SVG tags
 //      "me.shadaj" %%% "slinky-hot" % slinkyVersion // Hot loading, requires react-proxy package
         //"me.shadaj" %%% "slinky-scalajsreact-interop" % "0.6.4" // Interop with japgolly/scalajs-react,
-        "io.metabookmarks" %%% "slinky-material-ui" % "0.0.6",
+        "io.metabookmarks" %%% "slinky-material-ui" % "0.0.7",
         "io.circe" %%% "circe-parser" % circeVersion,
         "io.circe" %%% "circe-generic" % circeVersion,
-        "com.softwaremill.sttp.client" %%% "core" % "2.2.6"
+        "com.softwaremill.sttp.client" %%% "core" % "2.2.9"
       ),
-    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.4" % "test",
+    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.5" % "test",
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
   .settings(commonSettings)
@@ -297,7 +297,7 @@ lazy val `lagom-silhouette-web-shared` = (crossProject(JSPlatform, JVMPlatform)
         "io.circe" %%% "circe-generic",
         "io.circe" %%% "circe-parser"
       ).map(_ % circeVersion),
-    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.4" % "test",
+    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.5" % "test",
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 

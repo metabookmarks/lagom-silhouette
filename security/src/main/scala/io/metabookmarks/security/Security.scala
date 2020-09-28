@@ -155,7 +155,7 @@ object ClientSecurity {
     def secureInvoke(): Future[O] = secureInvoke(SERVICE_UUID)
 
     def secureInvoke(email: String): Future[O] =
-      sc.handleRequestHeader(authenticate(email)).invoke
+      sc.handleRequestHeader(authenticate(email)).invoke()
 
   }
 
