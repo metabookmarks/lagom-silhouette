@@ -82,7 +82,7 @@ val monocle = Seq(
 val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "7.0.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.7" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.3" % Test
-val cats = Seq("org.typelevel" %% "cats-core" % "2.2.0")
+val cats = Seq("org.typelevel" %% "cats-core" % "2.3.1")
 val lagomMacro = "io.metabookmarks" %% "lagom-scalameta" % "0.1.4"
 val chimney = "io.scalaland" %% "chimney" % "0.6.1"
 
