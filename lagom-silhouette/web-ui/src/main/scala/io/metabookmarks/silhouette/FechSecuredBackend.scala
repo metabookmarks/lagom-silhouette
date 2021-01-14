@@ -3,7 +3,7 @@ package io.metabookmarks.silhouette
 import io.circe._, io.circe.parser._
 import io.circe.generic.auto._, io.circe.syntax._
 
-import sttp.client._
+import sttp.client3._
 import scala.concurrent.Future
 import io.circe.Decoder
 import sttp.model.Uri
@@ -67,7 +67,7 @@ object ErrorHandlers {
 class FechSecuredBackendService(onError: String => Unit = ErrorHandlers.onError,
                                 onDisconnect: String => Unit = ErrorHandlers.onDisconnect
 )(implicit
-    sttpBackend: SttpBackend[Future, Nothing, sttp.client.NothingT] = FetchBackend()
+    sttpBackend: SttpBackend[Future, Any] = FetchBackend()
 ) {
   private def nocheck =
     basicRequest
@@ -100,7 +100,7 @@ class FechSecuredBackendService(onError: String => Unit = ErrorHandlers.onError,
         onError(exception.getMessage())
     }
 
-  def send[A](request: Request[Either[String, String], Nothing])(handle: A => Unit)(implicit dec: Decoder[A]): Unit =
+  def send[A](request: Request[Either[String, String], Any])(handle: A => Unit)(implicit dec: Decoder[A]): Unit =
     request
       .send()
       .onComplete(handleResponse(handle))

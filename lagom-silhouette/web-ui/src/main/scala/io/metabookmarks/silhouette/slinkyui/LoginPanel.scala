@@ -9,7 +9,7 @@ import slinky.materialui.core._
 import scalajs.js
 import js.Dynamic.{literal => CSS}
 
-import sttp.client._
+import sttp.client3._
 
 import io.circe._, io.circe.parser._
 import io.circe.generic.auto._, io.circe.syntax._
