@@ -278,7 +278,7 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
         "io.circe" %%% "circe-generic" % circeVersion,
         "com.softwaremill.sttp.client3" %%% "core" % "3.0.0"
       ),
-    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.5" % "test",
+    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.6" % "test",
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
   .settings(commonSettings)
@@ -297,7 +297,7 @@ lazy val `lagom-silhouette-web-shared` = (crossProject(JSPlatform, JVMPlatform)
         "io.circe" %%% "circe-generic",
         "io.circe" %%% "circe-parser"
       ).map(_ % circeVersion),
-    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.5" % "test",
+    libraryDependencies += "com.lihaoyi" %%% "utest" % "0.7.6" % "test",
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
