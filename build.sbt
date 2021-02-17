@@ -11,12 +11,12 @@ val circeVersion = "0.13.0"
 inThisBuild(
   List(
     resolvers ++= Seq("Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
-                      Resolver.bintrayRepo("metabookmarks", "releases")
+                      Resolver.githubPackages("metabookmarks")
       ),
     scalaVersion := scala213,
     organization := "io.metabookmarks.lagom",
-    bintrayOrganization := Some("metabookmarks"),
-    organizationName := "MetaBookMarks",
+    githubOwner := "metabookmarks",
+    githubRepository := "lagom-silhouette",
     startYear := Some(2019),
     licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
@@ -46,7 +46,6 @@ lazy val commonSettings =
   Seq(
     scalacOptions ++= crossFlags(scalaVersion.value),
     libraryDependencies ++= crossPlugins(scalaVersion.value),
-    bintrayRepository := "releases"
   )
 
 def crossFlags(scalaVersion: String) =
@@ -266,14 +265,13 @@ lazy val `lagom-silhouette-web-ui` = (project in file("lagom-silhouette/web-ui")
   .settings(commonSettings)
   .settings(
     scalaJSUseMainModuleInitializer := true,
-     bintrayRepository := "releases",
     libraryDependencies ++= Seq(
         "org.scala-js" %%% "scalajs-dom" % "1.1.0",
         "me.shadaj" %%% "slinky-core" % slinkyVersion, // core React functionality, no React DOM
         "me.shadaj" %%% "slinky-web" % slinkyVersion, // React DOM, HTML and SVG tags
 //      "me.shadaj" %%% "slinky-hot" % slinkyVersion // Hot loading, requires react-proxy package
         //"me.shadaj" %%% "slinky-scalajsreact-interop" % "0.6.4" // Interop with japgolly/scalajs-react,
-        "io.metabookmarks" %%% "slinky-material-ui" % "0.2.0",
+        "io.metabookmarks" %%% "slinky-material-ui" % "0.3.1",
         "io.circe" %%% "circe-parser" % circeVersion,
         "io.circe" %%% "circe-generic" % circeVersion,
         "com.softwaremill.sttp.client3" %%% "core" % "3.1.2"
@@ -291,7 +289,6 @@ lazy val `lagom-silhouette-web-shared` = (crossProject(JSPlatform, JVMPlatform)
   .jsSettings(name := "lagom-silhouette-web-shared-js")
   .jvmSettings(name := "lagom-silhouette-web-shared-jvm")
   .settings(
-     bintrayRepository := "releases",
     libraryDependencies ++= Seq(
         "io.circe" %%% "circe-core",
         "io.circe" %%% "circe-generic",
