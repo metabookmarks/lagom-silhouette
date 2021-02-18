@@ -16,7 +16,7 @@ inThisBuild(
     scalaVersion := scala213,
     organization := "io.metabookmarks.lagom",
     githubOwner := "metabookmarks",
-    githubRepository := "lagom-silhouette",
+    githubRepository := "releases",
     startYear := Some(2019),
     licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
